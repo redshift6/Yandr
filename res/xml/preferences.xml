@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="pref_mute"
+        android:title="@string/pref_mute"
+        android:summary="@string/pref_mute_summ"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_force_wake"
+        android:title="@string/pref_force_wake"
+        android:summary="@string/pref_force_wake_summ"
+        android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="pref_sum_totals"
+        android:title="@string/pref_sum_totals"
+        android:summary="@string/pref_sum_totals_summ"
+        android:defaultValue="false" />
+</PreferenceScreen>
