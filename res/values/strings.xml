@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YANDR</string>
+    <string name="btnRand">Randomize</string>
+    <string name="remove_dice">Remove</string>
+    <string name="edit_dice">Edit</string>
+    <string name="reroll_dice">Reroll</string>
+    <string name="clone_dice">Clone</string>
+    <string name="empty"></string>
+    
+    <string name="shake_lock">Shake Lock</string>
+    
+    <string name="clear_screen">Clear Screen</string>
+    <string name="dice_add_dialog_string">Add Die</string>
+    <string name="dice_edit_dialog_string">Edit Die</string>
+    <string name="short_clear">Clear</string>
+    <string name="short_add">Add</string>
+    
+    <string name="prompt_remove_dice">Remove this Die?</string>
+    <string name="prompt_clear_table">Clear all dice?</string>
+    <string name="prompt_yes">Yes</string>
+    <string name="prompt_ok">OK</string>
+    <string name="prompt_no">No</string>
+    <string name="prompt_cancel">Cancel</string>
+    
+    <string name="group_dice">Group dice?</string>
+    <string name="about">About</string>
+    
+    <string name="preferences">Settings/Preferences</string>
+    <string name="preferencesItem">Preferences</string>
+    <string name="pref_mute">Mute sounds?</string>
+    <string name="pref_mute_summ">Select to prevent YANDR playing sounds.</string>
+    <string name="pref_force_wake">Keep screen on?</string>
+    <string name="pref_force_wake_summ">Select to keep the screen on while YANDR is active.</string>
+    <string name="pref_sum_totals">Show final total on Dice</string>
+    <string name="pref_sum_totals_summ">Show total result instead of only raw dice totals</string>
+    <string name="authorname"> YANDR was written by: Andrew Solski</string>
+    <string name="artcredit">All art assets were created by: Maciek Solski</string>
+    <string name="attribution">YANDR uses sounds from SoundBible under the Creative Commons Attribution 3.0 License</string>
+    <string name="attribution2">The particular sound used is: Shake and Roll Dice Sound. It is available at:</string>
+    <string name="soundurl">http://soundbible.com/182-Shake-And-Roll-Dice.html</string>
+
+</resources>
