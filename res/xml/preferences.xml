@@ -6,6 +6,11 @@
         android:summary="@string/pref_mute_summ"
         android:defaultValue="true" />
     <CheckBoxPreference
+        android:key="pref_still"
+        android:title="@string/pref_still"
+        android:summary="@string/pref_still_summ"
+        android:defaultValue="true" />
+    <CheckBoxPreference
         android:key="pref_force_wake"
         android:title="@string/pref_force_wake"
         android:summary="@string/pref_force_wake_summ"
@@ -14,5 +19,5 @@
         android:key="pref_sum_totals"
         android:title="@string/pref_sum_totals"
         android:summary="@string/pref_sum_totals_summ"
-        android:defaultValue="false" />
+        android:defaultValue="true" />
 </PreferenceScreen>

@@ -4,6 +4,7 @@ package com.k7m.yandr;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 import com.k7m.yandr.R;
 
-public class DiceAdapter extends BaseAdapter{
+public class DiceAdapter extends BaseAdapter {
 
 	private Context mContext;
 
@@ -82,7 +83,7 @@ public class DiceAdapter extends BaseAdapter{
 		//Draw the results		
 		if (currentDie.getResult() >0) {
 			Integer result;
-			if (sumTotals = true) {
+			if (sumTotals == true) {
 				result = currentDie.getTotal();
 			} else {
 				result = currentDie.getResult();
@@ -114,5 +115,6 @@ public class DiceAdapter extends BaseAdapter{
 			R.drawable.ic_star_w, R.drawable.d20g            
 	};
 	private ArrayList<Dice> diceList;
-	private Boolean sumTotals;
+	private Boolean sumTotals = false;
+
 }

@@ -30,14 +30,22 @@
     <string name="preferencesItem">Preferences</string>
     <string name="pref_mute">Mute sounds?</string>
     <string name="pref_mute_summ">Select to prevent YANDR playing sounds.</string>
+    <string name="pref_mute_summ_sound">YANDR will play sounds</string>
+    <string name="pref_mute_summ_mute">YANDR will not play sounds</string>
     <string name="pref_force_wake">Keep screen on?</string>
     <string name="pref_force_wake_summ">Select to keep the screen on while YANDR is active.</string>
     <string name="pref_sum_totals">Show final total on Dice</string>
     <string name="pref_sum_totals_summ">Show total result instead of only raw dice totals</string>
+    <string name="pref_still">Allow vibrate?</string>
+    <string name="pref_still_summ">Allow YANDR to vibrate when rolling dice.</string>
+    
     <string name="authorname"> YANDR was written by: Andrew Solski</string>
     <string name="artcredit">All art assets were created by: Maciek Solski</string>
     <string name="attribution">YANDR uses sounds from SoundBible under the Creative Commons Attribution 3.0 License</string>
     <string name="attribution2">The particular sound used is: Shake and Roll Dice Sound. It is available at:</string>
     <string name="soundurl">http://soundbible.com/182-Shake-And-Roll-Dice.html</string>
+
+    <string name="name">Name</string>
+    <string name="namehint">Give the dice a name of your choosing.</string>
 
 </resources>

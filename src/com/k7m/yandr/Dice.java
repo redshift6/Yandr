@@ -7,8 +7,13 @@ import java.util.Random;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * @author Andy
+ * TODO: play with the mName and mTitle fields, decide how they work.
+ */
 public class Dice {
-	private String mName;
+	private String mName = null;
+	private String mTitle;
 	private Integer mModifier;			//The numerical modifier to add to the total result
 	private Integer mSides;				//The number of sides a dice/set of dice have
 	private Integer mMultiplier;		//The number of dice in this instance
@@ -22,7 +27,7 @@ public class Dice {
 		mSides = 1;
 		mMultiplier = 1;
 		mLocked = false;
-		setName();
+		setTitle();
 		resultArrayInit();
 	}
 	/**
@@ -34,7 +39,7 @@ public class Dice {
 		mSides = Sides;
 		mMultiplier = 1;
 		mLocked = false;
-		setName();
+		setTitle();
 		resultArrayInit();
 	}
 	/**
@@ -48,7 +53,7 @@ public class Dice {
 		mSides = Sides;
 		mMultiplier = Multiplier;
 		mLocked = false;
-		setName();
+		setTitle();
 		resultArrayInit();
 	}
 	/**
@@ -64,6 +69,7 @@ public class Dice {
 		mMultiplier = Multiplier;
 		mLocked = false;
 		mName = newName;
+        setTitle();
 		resultArrayInit();	
 	}
 	/**
@@ -94,8 +100,11 @@ public class Dice {
 	 * Returns the String representation of the object's name
 	 */
 	public String getName() {
-		return mName;
+        return (mName == null) ? "" : mName;
 	}
+    public String getTitle() {
+        return mTitle;
+    }
 	/**
 	 * @param position Position of the value in the result vector we want the value of
 	 * @return the value @ position
@@ -104,7 +113,7 @@ public class Dice {
 		return mResult.get(position);		
 	}
 	/**
-	 * @return The total of the rolls
+	 * @return The total of the raw rolls, summed
 	 */
 	public int getResult() {
 		Integer total = 0;		
@@ -162,20 +171,20 @@ public class Dice {
 		if (!mLocked) {
 			mSides = sides;
 			resultArrayInit();
-			setName();
+			setTitle();
 		}		
 	}
 	public void setModifier(int modifier) {
 		if (!mLocked) {
 			mModifier = modifier;
-			setName();
+			setTitle();
 		}		
 	}
 	public void setMultiplier(int multiplier) {
 		if (!mLocked) {
 			mMultiplier = multiplier;
 			resultArrayInit();
-			setName();
+			setTitle();
 		}		
 	}
 	public void setLocked(boolean lock) {
@@ -184,10 +193,10 @@ public class Dice {
 	public void setName(String newName) {
 		mName = newName;
 	}
-	private void setName() {
-		mName = mMultiplier + "d" + mSides;
+	private void setTitle() {
+		mTitle = mMultiplier + "d" + mSides;
 		if (mModifier >0) {
-			mName += "+" + mModifier;
+			mTitle += "+" + mModifier;
 		}
 	}
 	/**
@@ -218,7 +227,7 @@ public class Dice {
 	 * in the format AdB+C=($value)($value)......
 	 */
 	public String toString() {
-		String value = getName() + "=";
+		String value = getTitle() + "=";
 		for (Integer i : mResult) {
 			value+= "(" + i + ")";
 		}

@@ -1,7 +1,7 @@
 package com.k7m.yandr;
 
-import com.k7m.yandr.R;
-
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -18,14 +18,14 @@ import android.preference.PreferenceManager;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements  OnSharedPreferenceChangeListener{
 	/**
 	 * Determines whether to always show the simplified settings UI, where
 	 * settings are presented in a single list. When false, settings are shown
 	 * as a master/detail two-pane view on tablets. When true, a single pane is
 	 * shown on tablets.
 	 */
-	private static final boolean ALWAYS_SIMPLE_PREFS = false;
+	//private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,8 @@ public class SettingsActivity extends PreferenceActivity {
 		// to reflect the new value, per the Android Design guidelines.
 		
 		
-		bindPreferenceSummaryToValue(findPreference("pref_mute"));
-		bindPreferenceSummaryToValue(findPreference("pref_force_wake"));
+		//bindPreferenceSummaryToValue(findPreference("pref_mute"));
+		//bindPreferenceSummaryToValue(findPreference("pref_force_wake"));
 		//bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 		//bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 	}
@@ -130,8 +130,7 @@ public class SettingsActivity extends PreferenceActivity {
 	 */
 	private static void bindPreferenceSummaryToValue(Preference preference) {
 		// Set the listener to watch for value changes.
-		preference
-				.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
 		// Trigger the listener immediately with the preference's
 		// current value.
@@ -140,5 +139,11 @@ public class SettingsActivity extends PreferenceActivity {
 				PreferenceManager.getDefaultSharedPreferences(
 						preference.getContext()).getString(preference.getKey(),
 						""));
+	}
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		// TODO Auto-generated method stub
+		
 	}
 }
