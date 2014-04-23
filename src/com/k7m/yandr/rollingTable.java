@@ -80,7 +80,6 @@ public class rollingTable extends Activity implements SensorEventListener {
     private CheckBox mGroupDice;
 
     // Motion sensitivity variables
-    public boolean mRollShakeLock = false;
     private float mLastX, mLastY, mLastZ;
     private boolean mInitialized;
     private final float NOISE = (float) 2.0; //consider as a setting
@@ -205,7 +204,6 @@ public class rollingTable extends Activity implements SensorEventListener {
         dialog.setTitle(dice.getTitle() + "=" + dice.getResult());
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         image.setImageResource(mDiceAdapter.getDiceIconFromPosition(position));
-        // commented out until the name field is actually used.
         TextView text1 = (TextView) dialog.findViewById(R.id.text1);
         text1.setText(dice.getName());
         TextView text2 = (TextView) dialog.findViewById(R.id.text2);
