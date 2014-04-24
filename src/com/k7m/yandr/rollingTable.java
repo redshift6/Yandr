@@ -52,7 +52,6 @@ import android.widget.TextView;
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
     private static int ADD_DICE_ACTIVITY = 1;
-    private static int CALL_SETTINGS_ACTIVITY = 2;
 
     private final int EDIT_ID = 4;
     private final int DELETE_ID = 5;
@@ -87,7 +86,6 @@ public class rollingTable extends Activity implements SensorEventListener {
     public long mCummulativeTrigger = 20; //consider as a setting
 
     // Dice_Edit_Dialog Number_Picker max and min values
-    //overridden in code, ignore MinDiceSides and MaxDiceSides
     private final static int MinDiceMulti = 1;
     private final static int MaxDiceMulti = 9;
     private final static int MinDiceMod = 0;
@@ -194,14 +192,11 @@ public class rollingTable extends Activity implements SensorEventListener {
      * @param position The position in the DiceVector to access the position of the view on the screen
      */
     public void diceViewDialog(int position) {
-        /**
-         * TODO remeber to fix this view up, it is sloppy and lacks polish
-         */
         Dice dice = DiceList.get(position);
         Dialog dialog;
         dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.viewdicedialog);
-        dialog.setTitle(dice.getTitle() + "=" + dice.getResult());
+        dialog.setTitle(dice.getTitle() + "=" + dice.getTotal());
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         image.setImageResource(mDiceAdapter.getDiceIconFromPosition(position));
         TextView text1 = (TextView) dialog.findViewById(R.id.text1);
@@ -209,7 +204,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         TextView text2 = (TextView) dialog.findViewById(R.id.text2);
         text2.setText(dice.toString());
         TextView text3 = (TextView) dialog.findViewById(R.id.text3);
-        text3.setText("= " + ((Integer)dice.getTotal()).toString());
+        text3.setText(dice.getTitle() + " = " + dice.getResult() + " + " + dice.getModifier() + " = " + dice.getTotal());
         dialog.show();
     }
     public void aboutYANDR() {
@@ -342,6 +337,7 @@ public class rollingTable extends Activity implements SensorEventListener {
                         randNumber = rand.nextInt(dice.getSides())+1;
                         dice.setResult(j, randNumber);
                     }
+                    dice.sortResults();
                 }
             }
             // Use an i of >=0 to delegate all randoming to each individual dice instance
@@ -356,8 +352,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         }
     }
     /**
-     * Add the menu options Clear Screen(clears the dice vector), Switch Table(puts us back into V1 of the app),
-     * add dice dialog(add a dice) and the randomize function.
+     * Add the menu options
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -403,11 +398,6 @@ public class rollingTable extends Activity implements SensorEventListener {
                         data.getStringExtra(NEW_DICE_NAME));
                 DiceList.add(dice);
                 mDiceAdapter.notifyDataSetChanged();
-            }
-        }
-        if (requestCode== CALL_SETTINGS_ACTIVITY) {
-            if (resultCode == RESULT_OK) {
-
             }
         }
     }
