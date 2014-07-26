@@ -32,8 +32,16 @@
         </activity>
         <activity
                 android:name="com.k7m.yandr.DiceAddActivity"
-                android:label="@string/dice_add_dialog_string"
+                android:label="@string/dice_add_complex_dialog_string"
                 android:parentActivityName="com.k7m.yandr.rollingTable">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.k7m.yandr.rollingTable"/>
+        </activity>
+        <activity
+                android:name="com.k7m.yandr.AboutActivity"
+                android:label="@string/about"
+                android:parentActivityName="com.k7m.yandr.AboutActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.k7m.yandr.rollingTable"/>

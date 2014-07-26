@@ -49,6 +49,7 @@ import android.widget.TextView;
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
     private static int ADD_DICE_ACTIVITY = 1;
+    private static int ABOUT_ACTIVITY = 2;
 
     private final int EDIT_ID = 4;
     private final int DELETE_ID = 5;
@@ -198,30 +199,17 @@ public class rollingTable extends Activity implements SensorEventListener {
         Dialog dialog;
         dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.viewdicedialog);
-        dialog.setTitle(dice.getTitle() + "=" + dice.getTotal());
+        //dialog.setTitle(dice.getTitle() + "=" + dice.getTotal());
+        dialog.setTitle(dice.getRepresentativeTitle());
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         image.setImageResource(mDiceAdapter.getDiceIconFromPosition(position));
         TextView text1 = (TextView) dialog.findViewById(R.id.text1);
-        text1.setText(dice.getName());
+        text1.setText(dice.getTitle());
         TextView text2 = (TextView) dialog.findViewById(R.id.text2);
-        text2.setText(dice.toString());
+        text2.setText(dice.getTitleAndResult());
         TextView text3 = (TextView) dialog.findViewById(R.id.text3);
-        text3.setText(dice.getTitle() + " = " + dice.getResult() + " + " + dice.getModifier() + " = " + dice.getTotal());
-        dialog.show();
-    }
-    public void aboutYANDR() {
-        Dialog dialog;
-        dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.aboutyandr);
-        String title = new String(getString(R.string.about) + " " + getString(R.string.app_name));
-        dialog.setTitle(title);
-        final Button soundBtn = (Button) dialog.findViewById(R.id.atributelink);
-        soundBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.soundurl)));
-                startActivity(browserIntent);
-            }
-        });
+        //text3.setText(dice.getTitle() + " = " + dice.getResult() + " + " + dice.getModifier() + " = " + dice.getTotal());
+        text3.setText(dice.getTitleAndTotal());
         dialog.show();
     }
     /**
@@ -373,14 +361,13 @@ public class rollingTable extends Activity implements SensorEventListener {
                 addDice();
                 return true;
             case R.id.menu_roll_dice:
-                generateRandom(-1);
+                generateRandom(0);
                 return true;
-            /*case R.id.menu_activity_add_dice:
-                Intent intent = new Intent(mContext, DiceAddActivity.class);
-                startActivityForResult(intent, ADD_DICE_ACTIVITY);
-                return true;*/ 
+            case R.id.menu_activity_add_dice:
+                callComplexDiceAddScreen();
+                return true;
             case R.id.about_id:
-                aboutYANDR();
+                callAboutScreen();
                 return true;
             case R.id.preferences:
                 callSettingsScreen();
@@ -397,8 +384,7 @@ public class rollingTable extends Activity implements SensorEventListener {
                         data.getIntExtra(NEW_DICE_SIDES, 1),
                         data.getIntExtra(NEW_DICE_MOD, 1),
                         data.getStringExtra(NEW_DICE_NAME));
-                DiceList.add(dice);
-                mDiceAdapter.notifyDataSetChanged();
+                addDice(dice);
             }
         }
     }
@@ -466,9 +452,17 @@ public class rollingTable extends Activity implements SensorEventListener {
         Intent intent = new Intent(mContext, SettingsActivity.class);
         startActivity(intent);
     }
+    public void callAboutScreen() {
+        Intent intent = new Intent(mContext, AboutActivity.class);
+        startActivity(intent);
+    }
     public void addDice(Dice dice) {
         DiceList.add(dice);
         mDiceAdapter.notifyDataSetChanged();
+    }
+    public void callComplexDiceAddScreen() {
+        Intent intent = new Intent(mContext, DiceAddActivity.class);
+        startActivityForResult(intent, ADD_DICE_ACTIVITY);
     }
     public void onSensorChanged(SensorEvent event) {
         // Get instance of Vibrator from current Context

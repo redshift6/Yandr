@@ -97,6 +97,17 @@ public class Dice {
     public String getTitle() {
         return mTitle;
     }
+    public String getRepresentativeTitle() {
+        if ((mName != null) && (mName.length() >= 1)) {
+            return mName;
+        } else return mTitle;
+    }
+    public String getTitleAndResult() {
+        return mTitle + " = " + getResult();
+    }
+    public String getTitleAndTotal() {
+        return mTitle + " = " + getTotal();
+    }
     /**
      * @param position Position of the value in the result vector we want the value of
      * @return the value @ position

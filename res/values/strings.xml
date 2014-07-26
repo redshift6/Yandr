@@ -12,6 +12,7 @@
     
     <string name="clear_screen">Clear Screen</string>
     <string name="dice_add_dialog_string">Add Die</string>
+    <string name="dice_add_complex_dialog_string">Add Complex Die</string>
     <string name="dice_edit_dialog_string">Edit Die</string>
     <string name="short_clear">Clear</string>
     <string name="short_add">Add</string>
@@ -42,7 +43,7 @@
     <string name="pref_rotate_summ">Enable to allow YANDR to rotate the screen orientation.</string>
     
     <string name="authorname"> YANDR was written by: Andrew Solski</string>
-    <string name="artcredit">All art assets were created by: Maciek Solski</string>
+    <string name="artcredit">Art assets were created by: Maciek Solski and Andrew Solski</string>
     <string name="attribution">YANDR uses sounds from SoundBible under the Creative Commons Attribution 3.0 License</string>
     <string name="attribution2">The particular sound used is: Shake and Roll Dice Sound. It is available at:</string>
     <string name="soundurl">http://soundbible.com/182-Shake-And-Roll-Dice.html</string>

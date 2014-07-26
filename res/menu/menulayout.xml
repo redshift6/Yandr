@@ -10,8 +10,8 @@
           android:icon="@drawable/d20gclrs"/>
     <item android:id="@+id/menu_roll_dice"
           android:title="@string/btnRand" />
-    <!--  <item android:id="@+id/menu_activity_add_dice"
-          android:title="@string/dice_add_dialog_string" />--> 
+     <item android:id="@+id/menu_activity_add_dice"
+          android:title="@string/dice_add_complex_dialog_string" />
     <item android:id="@+id/preferences"
           android:title="@string/preferencesItem"/>
     <item android:id="@+id/about_id"

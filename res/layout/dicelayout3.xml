@@ -9,7 +9,7 @@
         android:layout_height="70dp"
         android:scaleType="centerInside"
         android:contentDescription="@string/empty"
-        android:src="@drawable/ic_star_b" />
+        android:src="@drawable/d20b" />
     <TextView
         android:id="@+id/dice_multi"
         android:textIsSelectable="false"
