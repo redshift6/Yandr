@@ -44,10 +44,7 @@ import android.widget.TextView;
  * TODO: Complete the DiceAddActivity, with all the additional options it will use
  * TODO: make all user interface elements a fragment
  * TODO: code cleanup, especially in the settings page.
- * TODO: expand the settings options
- * TODO: consider \n for newline characters to simplify string reporting of dice, as a single textview instead of multiple
- * TODO: check for any other needed functionality
- * TODO: consider adding profiles for different games, like auto-rerolling 1s
+ * TODO: check for any other needed functionality(names and titles)
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
@@ -71,7 +68,7 @@ public class rollingTable extends Activity implements SensorEventListener {
     // App variables
     private Context mContext;
     private DiceAdapter mDiceAdapter;
-    private NumberPicker numpic1,numpic2,numpic3;
+    private NumberPicker mNumpic1,mNumpic2,mNumpic3;
     private CheckBox mShakeLock;
     private boolean mRollLock;
     private SensorManager mSensorManager;
@@ -97,12 +94,13 @@ public class rollingTable extends Activity implements SensorEventListener {
     // Sound variables
     private MediaPlayer mPlayer;
 
-    // Options variables
+    // Options/Settings variables
     SharedPreferences sharedPref;
     private Boolean muteLock;
     private Boolean screenLock;
     private Boolean sumTotals;
     private Boolean vibrate;
+    private Boolean rotate;
     //add static variables to add options to the app
 
     /** Called when the activity is first created. */
@@ -124,8 +122,6 @@ public class rollingTable extends Activity implements SensorEventListener {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         loadPreferences();
         initAudio();
-        // disable screen orientation
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
         mShakeLock = (CheckBox) findViewById(R.id.switch1);
         mShakeLock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -150,14 +146,20 @@ public class rollingTable extends Activity implements SensorEventListener {
         mDiceSides = getResources().getStringArray(R.array.dice_sides_string_array);
         mDiceSidesInt = getResources().getIntArray(R.array.dice_sides_integer_array);
     }
-
     private void loadPreferences() {
         muteLock = sharedPref.getBoolean("pref_mute", false);
         screenLock = sharedPref.getBoolean("pref_force_wake", false);
         DiceTable.setKeepScreenOn(screenLock);
         sumTotals = sharedPref.getBoolean("pref_sum_totals", false);
         mDiceAdapter.setSumTotals(sumTotals);
+        mDiceAdapter.notifyDataSetChanged();
         vibrate = sharedPref.getBoolean("pref_still", true);
+        rotate = sharedPref.getBoolean("pref_rotate", false);
+        if (rotate) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        }
     }
     /**
      * Create the MediaPlayer and load the  sound resource
@@ -229,33 +231,33 @@ public class rollingTable extends Activity implements SensorEventListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.diceeditdialog2, (ViewGroup) findViewById(R.id.layout_root));
-        numpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
-        numpic1.setMaxValue(MaxDiceMulti);
-        numpic1.setMinValue(MinDiceMulti);
-        numpic2 = (NumberPicker) layout.findViewById(R.id.sidespicker);
-        numpic2.setDisplayedValues(mDiceSides);
-        numpic2.setMaxValue(mDiceSides.length-1);
-        numpic2.setMinValue(0);
-        numpic3 = (NumberPicker) layout.findViewById(R.id.modpicker);
-        numpic3.setMaxValue(MaxDiceMod);
-        numpic3.setMinValue(MinDiceMod);
+        mNumpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
+        mNumpic1.setMaxValue(MaxDiceMulti);
+        mNumpic1.setMinValue(MinDiceMulti);
+        mNumpic2 = (NumberPicker) layout.findViewById(R.id.sidespicker);
+        mNumpic2.setDisplayedValues(mDiceSides);
+        mNumpic2.setMaxValue(mDiceSides.length-1);
+        mNumpic2.setMinValue(0);
+        mNumpic3 = (NumberPicker) layout.findViewById(R.id.modpicker);
+        mNumpic3.setMaxValue(MaxDiceMod);
+        mNumpic3.setMinValue(MinDiceMod);
         // Suppress soft keyboard from the beginning
         // it was infuriatingly popping up and down whenever user tried to edit multiplier
-        numpic1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        numpic2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        numpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        mNumpic1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        mNumpic2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        mNumpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         mGroupDice = (CheckBox) layout.findViewById(R.id.groupDice);
         mGroupDice.setChecked(false);
         builder.setMessage(R.string.dice_add_dialog_string).setCancelable(true).setPositiveButton(R.string.prompt_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Dice dice = new Dice();
                 if (mGroupDice.isChecked() == true)  {
-                    dice = new Dice(numpic1.getValue(), mDiceSidesInt[numpic2.getValue()], numpic3.getValue());
+                    dice = new Dice(mNumpic1.getValue(), mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
                     DiceList.add(dice);
                 }
                 if (mGroupDice.isChecked() == false) {
-                    for (int i = 0;i<numpic1.getValue();i++){
-                        dice = new Dice(1, mDiceSidesInt[numpic2.getValue()], numpic3.getValue());
+                    for (int i = 0;i<mNumpic1.getValue();i++){
+                        dice = new Dice(1, mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
                         DiceList.add(dice);
                     }
                 }
@@ -276,35 +278,35 @@ public class rollingTable extends Activity implements SensorEventListener {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.diceeditdialog, (ViewGroup) findViewById(R.id.layout_root));
         final Dice currentDice = (Dice)mDiceAdapter.getItem(position);
-        numpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
-        numpic1.setMaxValue(MaxDiceMulti);
-        numpic1.setMinValue(MinDiceMulti);
-        numpic2 = (NumberPicker) layout.findViewById(R.id.sidespicker);
-        numpic2.setDisplayedValues(mDiceSides);
-        numpic2.setMaxValue(mDiceSides.length-1);
-        numpic2.setMinValue(0);
-        numpic3 = (NumberPicker) layout.findViewById(R.id.modpicker);
-        numpic3.setMaxValue(MaxDiceMod);
-        numpic3.setMinValue(MinDiceMod);
-        numpic1.setValue(currentDice.getMultiplier());
+        mNumpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
+        mNumpic1.setMaxValue(MaxDiceMulti);
+        mNumpic1.setMinValue(MinDiceMulti);
+        mNumpic2 = (NumberPicker) layout.findViewById(R.id.sidespicker);
+        mNumpic2.setDisplayedValues(mDiceSides);
+        mNumpic2.setMaxValue(mDiceSides.length-1);
+        mNumpic2.setMinValue(0);
+        mNumpic3 = (NumberPicker) layout.findViewById(R.id.modpicker);
+        mNumpic3.setMaxValue(MaxDiceMod);
+        mNumpic3.setMinValue(MinDiceMod);
+        mNumpic1.setValue(currentDice.getMultiplier());
         for (int i = 0; i<mDiceSidesInt.length; i++) {
             if (currentDice.getSides() == mDiceSidesInt[i]) {
-                numpic2.setValue(i);
+                mNumpic2.setValue(i);
             }
         }
-        numpic3.setValue(currentDice.getModifier());
-        numpic1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        numpic2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        numpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        mNumpic3.setValue(currentDice.getModifier());
+        mNumpic1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        mNumpic2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        mNumpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         builder.setMessage(R.string.dice_edit_dialog_string).setCancelable(true).setPositiveButton(R.string.prompt_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                if (numpic1.getValue() != currentDice.getMultiplier()) {
-                    DiceList.get(position).setMultiplier(numpic1.getValue());
+                if (mNumpic1.getValue() != currentDice.getMultiplier()) {
+                    DiceList.get(position).setMultiplier(mNumpic1.getValue());
                 }
-                if (mDiceSidesInt[numpic2.getValue()] != currentDice.getSides()) {
-                    DiceList.get(position).setSides(mDiceSidesInt[numpic2.getValue()]);
+                if (mDiceSidesInt[mNumpic2.getValue()] != currentDice.getSides()) {
+                    DiceList.get(position).setSides(mDiceSidesInt[mNumpic2.getValue()]);
                 }
-                DiceList.get(position).setModifier(numpic3.getValue());
+                DiceList.get(position).setModifier(mNumpic3.getValue());
                 mDiceAdapter.notifyDataSetChanged();
             }
         })
@@ -323,7 +325,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         DiceList.add(position+1, dice2);
         mDiceAdapter.notifyDataSetChanged();
 
-    };
+    }
     public void generateRandom(int i) {
         //if i is less than 0, do all dice rolls here, if >=0, do specified dice rolls at the dice class level
         // Use an i of -1 to generate all random values in one place from one rand seed
@@ -361,7 +363,6 @@ public class rollingTable extends Activity implements SensorEventListener {
         inflater.inflate(R.menu.menulayout, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
@@ -434,8 +435,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         alert.show();
     }
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, EDIT_ID, 0, R.string.edit_dice);
         menu.add(0, DELETE_ID, 0, R.string.remove_dice);
@@ -462,17 +462,14 @@ public class rollingTable extends Activity implements SensorEventListener {
         }
         return super.onContextItemSelected(item);
     }
-
     public void callSettingsScreen() {
         Intent intent = new Intent(mContext, SettingsActivity.class);
         startActivity(intent);
     }
-
     public void addDice(Dice dice) {
         DiceList.add(dice);
         mDiceAdapter.notifyDataSetChanged();
     }
-
     public void onSensorChanged(SensorEvent event) {
         // Get instance of Vibrator from current Context
         float deltaX, deltaY, deltaZ;
@@ -514,7 +511,6 @@ public class rollingTable extends Activity implements SensorEventListener {
         return sb.toString();
     }
     private void ReadSave(String save) {
-
         Integer length;
         String diceString;
         String multi, sides, mod;
@@ -567,11 +563,8 @@ public class rollingTable extends Activity implements SensorEventListener {
         loadPreferences();
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
-    
     @Override
     public void onAccuracyChanged(Sensor arg0, int arg1) {
         //keep this empty
     }
-
-    
 }
