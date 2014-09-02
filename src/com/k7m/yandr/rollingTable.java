@@ -22,6 +22,10 @@ import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,12 +36,11 @@ import java.util.Random;
  * TODO: Make dialogs separate classes with Dice parameters
  * TODO: make ui elements into reusable ui components
  * TODO: code cleanup, especially in the settings page.
- * TODO: redo save dice functionality completely
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
     private static int ADD_DICE_ACTIVITY = 1;
-    private static int ABOUT_ACTIVITY = 2;
+    //private static int ABOUT_ACTIVITY = 2;
 
     private static int DICE_ROLLING_SOURCE = -1;
     private static int VIBRATE_DURATION = 200;
@@ -49,10 +52,11 @@ public class rollingTable extends Activity implements SensorEventListener {
     private static String NEW_DICE_MULTI = "NEW_DICE_MULTI";
     private static String NEW_DICE_SIDES = "NEW_DICE_SIDES";
     private static String NEW_DICE_MOD = "NEW_DICE_MOD";
+    private static String FILENAME = "YANDRARRAY.dat";
 
     // DiceArray
     private ArrayList<Dice> DiceList;
-    private final String ArraySaveTag = "Array";
+    //private final String ArraySaveTag = "Array";
 
     // Display item variables
     private GridView DiceTable;
@@ -99,7 +103,10 @@ public class rollingTable extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        DiceList = new ArrayList<Dice>();
+        ReadSave();
+        if (DiceList == null || DiceList.isEmpty()) {
+            DiceList = new ArrayList<Dice>();
+        }
         setContentView(R.layout.rtablemain);
         DiceTable = (GridView)findViewById(R.id.DiceView);
 
@@ -117,11 +124,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         mShakeLock = (CheckBox) findViewById(R.id.switch1);
         mShakeLock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mRollLock = true;
-                } else {
-                    mRollLock = false;
-                }
+                    mRollLock = isChecked;
             }
         });
         mShakeLock.setChecked(true);
@@ -228,12 +231,12 @@ public class rollingTable extends Activity implements SensorEventListener {
         mGroupDice.setChecked(false);
         builder.setMessage(R.string.dice_add_dialog_string).setCancelable(true).setPositiveButton(R.string.prompt_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Dice dice = new Dice();
-                if (mGroupDice.isChecked() == true)  {
+                Dice dice;
+                if (mGroupDice.isChecked())  {
                     dice = new Dice(mNumpic1.getValue(), mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
                     DiceList.add(dice);
                 }
-                if (mGroupDice.isChecked() == false) {
+                if (!mGroupDice.isChecked()) {
                     for (int i = 0;i<mNumpic1.getValue();i++){
                         dice = new Dice(1, mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
                         DiceList.add(dice);
@@ -487,51 +490,39 @@ public class rollingTable extends Activity implements SensorEventListener {
             }
         }
     }
-    private String SaveDiceArray() {
-        StringBuilder sb = new StringBuilder();
-        for (Dice dice : DiceList) {
-            sb.append(dice.getSave()+"|");
+    private void SaveDiceArray() {
+        FileOutputStream fos;
+        ObjectOutputStream out;
+        try {
+            fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            out = new ObjectOutputStream(fos);
+            out.writeObject(DiceList);
+            out.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return sb.toString();
     }
-    private void ReadSave(String save) {
-        Integer length;
-        String diceString;
-        String multi, sides, mod;
-        //parse the string for dice information
-        while (save.length() != 0){
-            length = save.indexOf("|");
-            diceString = save.substring(0, length);
-            //parse the individual values to make a dice
-            multi = diceString.substring(0, diceString.indexOf("d"));
-            diceString = diceString.substring(diceString.indexOf("d")+1);
-            sides = diceString.substring(0, diceString.indexOf("+"));
-            diceString = diceString.substring(diceString.indexOf("+")+1);
-            mod = diceString.substring(0, diceString.indexOf(":"));
-            diceString = diceString.substring(diceString.indexOf(":")+1);
-            //diceString contains only our results now, add them to the dice.
-            Dice dice = new Dice(Integer.parseInt(multi), Integer.parseInt(sides),Integer.parseInt(mod));
-            for (int j = 0; j<Integer.parseInt(multi); j++) {
-                Integer distance;
-                distance = diceString.indexOf(":");
-                dice.setResult(j, Integer.parseInt(diceString.substring(0,distance)));
-                diceString = diceString.substring(distance+1);
-            }
-            DiceList.add(dice);
-            save = save.substring(length+1);
+    private void ReadSave() {
+        FileInputStream fis;
+        ObjectInputStream in;
+        try {
+            fis = openFileInput(FILENAME);
+            in = new ObjectInputStream(fis);
+            DiceList = (ArrayList<Dice>) in.readObject();
+            in.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        String save = SaveDiceArray();
-        outState.putString(ArraySaveTag, save);
+        SaveDiceArray();
         super.onSaveInstanceState(outState);
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        String save = savedInstanceState.getString(ArraySaveTag);
-        ReadSave(save);
+        ReadSave();
     }
     @Override
     protected void onPause() {

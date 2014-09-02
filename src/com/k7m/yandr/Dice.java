@@ -6,13 +6,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Random;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 /**
  * @author Andy
- * TODO: play with the mName and mTitle fields, decide how they work.
- * TODO: fix string reporting functions.
  */
 public class Dice implements Serializable {
     private String mName = null;
@@ -21,27 +16,7 @@ public class Dice implements Serializable {
     private Integer mSides;				//The number of sides a dice/set of dice have
     private Integer mMultiplier;		//The number of dice in this instance
     private ArrayList<Integer> mResult;	//The vector holding the dice in this instance
-    /**
-     * Create a 1d1+0
-     */
-    public Dice() {
-        mModifier = 0;
-        mSides = 1;
-        mMultiplier = 1;
-        setTitle();
-        resultArrayInit();
-    }
-    /**
-     * Create a 1dX +0
-     * @param Sides The number of sides this die has
-     */
-    public Dice(int Sides) {
-        mModifier = 0;
-        mSides = Sides;
-        mMultiplier = 1;
-        setTitle();
-        resultArrayInit();
-    }
+
     /**
      * Create a die/dice instance with <b>Multiplier</b> dice, each with <b>Sides</b> sides and adding a <b>Modifier</b> modifier.
      * @param Multiplier The number of dice to simulate
@@ -60,7 +35,7 @@ public class Dice implements Serializable {
      * @param Multiplier The number of dice to simulate
      * @param Sides The number of sides each dice will have
      * @param Modifier The positive number to add to the total
-     * @param newName
+     * @param newName The name of the dice.
      */
     public Dice(int Multiplier, int Sides, int Modifier, String newName) {
         mModifier = Modifier;
@@ -107,22 +82,21 @@ public class Dice implements Serializable {
     }
     public String getTitleAndResult() {
         StringBuilder value = new StringBuilder();
-        value.append(mTitle + " = ");
+        value.append(mTitle);
+        value.append(" = ");
         for (int i = 0; i< mMultiplier; i++) {
-            value.append("(" + mResult.get(i) + ")");
+            value.append("(");
+            value.append(mResult.get(i));
+            value.append(")");
         }
-        if (mModifier > 0) value.append("+" + mModifier);
+        if (mModifier > 0) {
+            value.append("+");
+            value.append(mModifier);
+        }
         return value.toString();
     }
     public String getTitleAndTotal() {
         return mTitle + " = " + getTotal();
-    }
-    /**
-     * @param position Position of the value in the result vector we want the value of
-     * @return the value @ position
-     */
-    public int getResultAtPosition(int position) {
-        return mResult.get(position);
     }
     /**
      * @return The total of the raw rolls, summed
@@ -141,41 +115,12 @@ public class Dice implements Serializable {
         return getResult() + mModifier;
     }
     /**
-     *
-     * @return An ArrayList containing the results of the dice
-     */
-    public ArrayList<Integer> getResultList() {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i = 0; i < mMultiplier; i++) {
-            list.add(getResultAtPosition(i));
-        }
-        return mResult;
-    }
-    /**
-     *
-     * @return A sorted ArrayList containing the results of the dice, from lowest to highest
-     */
-    public ArrayList<Integer> getSortedResultList() {
-        ArrayList<Integer> sortedList = new ArrayList<Integer>();
-        sortedList = getResultList();
-        Collections.sort(getResultList());
-        return sortedList;
-    }
-    public String getSave() {
-        StringBuilder save = new StringBuilder();
-        save.append(mMultiplier.toString() + "d" +mSides.toString() + "+" +mModifier.toString());
-        for (int i = 0; i < mMultiplier; i++) {
-            save.append(":"+mResult.get(i).toString());
-        }
-        return save.toString() +":";
-    }
-    /**
      * Run this to create our Result Vector, and fill it with 0 values to begin with.
      */
     private void resultArrayInit() {
         mResult = new ArrayList<Integer> ();
         for (int i = 0; i< mMultiplier; i++) {
-            mResult.add(Integer.valueOf(0));
+            mResult.add(0);
         }
     }
     public void setSides(int sides) {
@@ -215,8 +160,8 @@ public class Dice implements Serializable {
      */
     public void roll() {
         Calendar c = Calendar.getInstance();
-        int msecond = c.get(Calendar.MILLISECOND);
-        Random rand = new Random(msecond);
+        int mSecond = c.get(Calendar.MILLISECOND);
+        Random rand = new Random(mSecond);
         int randNumber;
         for (int i = 0; i< mMultiplier; i++) {
             randNumber = rand.nextInt(mSides)+1;
@@ -225,10 +170,10 @@ public class Dice implements Serializable {
         sortResults();
     }
     public void sortResults() {
-        ArrayList<Integer> sortedList = new ArrayList<Integer>();
-        sortedList = getResultList();
-        Collections.sort(getResultList());
-        mResult = sortedList;
+        //ArrayList<Integer> sortedList = new ArrayList<Integer>();
+        //sortedList = getResultList();
+        Collections.sort(mResult);
+        //mResult = sortedList;
     }
     /**
      * Returns the String representation of this object
@@ -236,7 +181,7 @@ public class Dice implements Serializable {
      */
     public String toString() {
         String value;
-        if ((mName != "") && (mName != null)) {
+        if ((!mName.equals("")) && (mName != null)) {
             value = getName() + " = ";
         } else value = getTitle() + " = ";
         for (Integer i : mResult) {
@@ -251,8 +196,8 @@ public class Dice implements Serializable {
      * Have the dice class draw the view depending on it's contents, settings, preferences etc..
      * The adapter would simply call the dice to get it's own preferable graphical representation
      */
-    public View getView(int position, View convertView, ViewGroup parent) {
+    //public View getView(int position, View convertView, ViewGroup parent) {
         //Consider filling in if this becomes a thing.
-        return convertView;
-    }
+        //return convertView;
+    //}
 }
