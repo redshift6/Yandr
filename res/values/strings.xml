@@ -49,6 +49,6 @@
     <string name="soundurl">http://soundbible.com/182-Shake-And-Roll-Dice.html</string>
 
     <string name="name">Name</string>
-    <string name="namehint">Give the dice a name of your choosing.</string>
+    <string name="namehint">Give the dice a name.</string>
 
 </resources>

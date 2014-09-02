@@ -1,8 +1,5 @@
 package com.k7m.yandr;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,41 +13,34 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.NumberPicker;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /*TODO: 
  * YetANotherDiceRoller(YANDR)(Yet Another Native Dice Roller)('yandere' or 'yandir')
  * TODO: Complete the DiceAddActivity, with all the additional options it will use
  * TODO: make all user interface elements a fragment
+ * TODO: Make dialogs separate classes with Dice parameters
+ * TODO: make ui elements into reusable ui components
  * TODO: code cleanup, especially in the settings page.
- * TODO: check for any other needed functionality(names and titles)
+ * TODO: redo save dice functionality completely
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
     private static int ADD_DICE_ACTIVITY = 1;
     private static int ABOUT_ACTIVITY = 2;
 
+    private static int DICE_ROLLING_SOURCE = -1;
+    private static int VIBRATE_DURATION = 200;
     private final int EDIT_ID = 4;
     private final int DELETE_ID = 5;
     private final int REROLL_ID = 6;
@@ -337,8 +327,8 @@ public class rollingTable extends Activity implements SensorEventListener {
             }
             mDiceAdapter.notifyDataSetChanged();
             playAudio();
-            // Vibrate for 200 milliseconds
-            if (vibrate) v.vibrate(200);
+            // Vibrate for VIBRATE_DURATION milliseconds
+            if (vibrate) v.vibrate(VIBRATE_DURATION);
         }
     }
     /**
@@ -361,7 +351,7 @@ public class rollingTable extends Activity implements SensorEventListener {
                 addDice();
                 return true;
             case R.id.menu_roll_dice:
-                generateRandom(0);
+                generateRandom(DICE_ROLLING_SOURCE);
                 return true;
             case R.id.menu_activity_add_dice:
                 callComplexDiceAddScreen();
@@ -490,7 +480,7 @@ public class rollingTable extends Activity implements SensorEventListener {
             mCummDelta = mCummDelta + TotalDelta; //add to our additive change total
             if (mCummDelta > mCummulativeTrigger) {
                 if ((!mRollLock) && !(DiceList.isEmpty())) {
-                    generateRandom(-1);
+                    generateRandom(DICE_ROLLING_SOURCE);
                     mShakeLock.setChecked(true);
                 }
                 mCummDelta = 0;

@@ -1,6 +1,8 @@
 package com.k7m.yandr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Random;
 
@@ -10,8 +12,9 @@ import android.view.ViewGroup;
 /**
  * @author Andy
  * TODO: play with the mName and mTitle fields, decide how they work.
+ * TODO: fix string reporting functions.
  */
-public class Dice {
+public class Dice implements Serializable {
     private String mName = null;
     private String mTitle;
     private Integer mModifier;			//The numerical modifier to add to the total result
@@ -103,7 +106,13 @@ public class Dice {
         } else return mTitle;
     }
     public String getTitleAndResult() {
-        return mTitle + " = " + getResult();
+        StringBuilder value = new StringBuilder();
+        value.append(mTitle + " = ");
+        for (int i = 0; i< mMultiplier; i++) {
+            value.append("(" + mResult.get(i) + ")");
+        }
+        if (mModifier > 0) value.append("+" + mModifier);
+        return value.toString();
     }
     public String getTitleAndTotal() {
         return mTitle + " = " + getTotal();
@@ -205,7 +214,9 @@ public class Dice {
      * Roll the dice, and assign each die in the group a result.
      */
     public void roll() {
-        Random rand = new Random();
+        Calendar c = Calendar.getInstance();
+        int msecond = c.get(Calendar.MILLISECOND);
+        Random rand = new Random(msecond);
         int randNumber;
         for (int i = 0; i< mMultiplier; i++) {
             randNumber = rand.nextInt(mSides)+1;

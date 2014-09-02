@@ -36,10 +36,10 @@
     <EditText
             android:id="@+id/nameDiceText"
             android:editable="true"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/nameDice"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:hint="@string/namehint"
             android:text="@string/empty"/>
     <Button
@@ -47,7 +47,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dice_add_dialog_string"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_below="@id/nameDice"
+            android:layout_toRightOf="@id/nameDiceText"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/nameDiceText"
             android:onClick="addDice"/>
 </RelativeLayout>
