@@ -36,11 +36,13 @@ import java.util.Random;
  * TODO: Make dialogs separate classes with Dice parameters
  * TODO: make ui elements into reusable ui components
  * TODO: code cleanup, especially in the settings page.
+ * TODO: implement a colour dice, to choose a colour from a list of colours
+ * TODO: rework the addDice screen to handle various SimpleDice implementations
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
-    private static int ADD_DICE_ACTIVITY = 1;
-    //private static int ABOUT_ACTIVITY = 2;
+    private static int ADD_D20DICE_ACTIVITY = 1;
+    private static int ADD_COLOURDICE_ACTIVITY = 2;
 
     private static int DICE_ROLLING_SOURCE = -1;
     private static int VIBRATE_DURATION = 200;
@@ -55,7 +57,7 @@ public class rollingTable extends Activity implements SensorEventListener {
     private static String FILENAME = "YANDRARRAY.dat";
 
     // DiceArray
-    private ArrayList<Dice> DiceList;
+    private ArrayList<SimpleDice> DiceList;
     //private final String ArraySaveTag = "Array";
 
     // Display item variables
@@ -105,7 +107,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         mContext = this;
         ReadSave();
         if (DiceList == null || DiceList.isEmpty()) {
-            DiceList = new ArrayList<Dice>();
+            DiceList = new ArrayList<SimpleDice>();
         }
         setContentView(R.layout.rtablemain);
         DiceTable = (GridView)findViewById(R.id.DiceView);
@@ -185,10 +187,10 @@ public class rollingTable extends Activity implements SensorEventListener {
     }
     /**
      * Show a dialog that tells us what the dice was set to, what it rolled, and the total
-     * @param position The position in the DiceVector to access the position of the view on the screen
+     * @param position The position in the DiceList to access the position of the view on the screen
      */
     public void diceViewDialog(int position) {
-        Dice dice = DiceList.get(position);
+        SimpleDice dice = DiceList.get(position);
         Dialog dialog;
         dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.viewdicedialog);
@@ -231,14 +233,14 @@ public class rollingTable extends Activity implements SensorEventListener {
         mGroupDice.setChecked(false);
         builder.setMessage(R.string.dice_add_dialog_string).setCancelable(true).setPositiveButton(R.string.prompt_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Dice dice;
+                SimpleDice dice;
                 if (mGroupDice.isChecked())  {
-                    dice = new Dice(mNumpic1.getValue(), mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
+                    dice = new D20Dice(mNumpic1.getValue(), mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
                     DiceList.add(dice);
                 }
                 if (!mGroupDice.isChecked()) {
                     for (int i = 0;i<mNumpic1.getValue();i++){
-                        dice = new Dice(1, mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
+                        dice = new D20Dice(1, mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
                         DiceList.add(dice);
                     }
                 }
@@ -258,7 +260,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.diceeditdialog, (ViewGroup) findViewById(R.id.layout_root));
-        final Dice currentDice = (Dice)mDiceAdapter.getItem(position);
+        final SimpleDice currentDice = (D20Dice)mDiceAdapter.getItem(position);
         mNumpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
         mNumpic1.setMaxValue(MaxDiceMulti);
         mNumpic1.setMinValue(MinDiceMulti);
@@ -301,8 +303,8 @@ public class rollingTable extends Activity implements SensorEventListener {
         alert.show();
     }
     public void cloneDice(int position){
-        Dice dice = DiceList.get(position);
-        Dice dice2 = new Dice(dice.getMultiplier(), dice.getSides(), dice.getModifier());
+        SimpleDice dice = DiceList.get(position);
+        SimpleDice dice2 = new D20Dice(dice.getMultiplier(), dice.getSides(), dice.getModifier());
         DiceList.add(position+1, dice2);
         mDiceAdapter.notifyDataSetChanged();
 
@@ -315,7 +317,7 @@ public class rollingTable extends Activity implements SensorEventListener {
             if (i<0){
                 Random rand = new Random();
                 int randNumber;
-                for (Dice dice : DiceList) {
+                for (SimpleDice dice : DiceList) {
                     for (int j=0; j<dice.getMultiplier(); j++){
                         randNumber = rand.nextInt(dice.getSides())+1;
                         dice.setResult(j, randNumber);
@@ -325,7 +327,7 @@ public class rollingTable extends Activity implements SensorEventListener {
             }
             // Use an i of >=0 to delegate all randoming to each individual dice instance
             if (i>=0){
-                Dice dice = DiceList.get(i);
+                SimpleDice dice = DiceList.get(i);
                 dice.roll();
             }
             mDiceAdapter.notifyDataSetChanged();
@@ -344,6 +346,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         inflater.inflate(R.menu.menulayout, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
@@ -370,14 +373,23 @@ public class rollingTable extends Activity implements SensorEventListener {
         }
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_DICE_ACTIVITY) {
+        if (requestCode == ADD_D20DICE_ACTIVITY) {
             if (resultCode == RESULT_OK) {
-                Dice dice = new Dice(
+                SimpleDice dice = new D20Dice(
                         data.getIntExtra(NEW_DICE_MULTI, 1),
                         data.getIntExtra(NEW_DICE_SIDES, 1),
                         data.getIntExtra(NEW_DICE_MOD, 1),
                         data.getStringExtra(NEW_DICE_NAME));
                 addDice(dice);
+            }
+        } else if (requestCode == ADD_COLOURDICE_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+                SimpleDice dice = new ColourDice();
+                        //data.getIntExtra(NEW_DICE_MULTI, 1),
+                        //data.getIntExtra(NEW_DICE_SIDES, 1),
+                        //data.getIntExtra(NEW_DICE_MOD, 1),
+                        //data.getStringExtra(NEW_DICE_NAME));
+                //addDice(dice);
             }
         }
     }
@@ -449,13 +461,13 @@ public class rollingTable extends Activity implements SensorEventListener {
         Intent intent = new Intent(mContext, AboutActivity.class);
         startActivity(intent);
     }
-    public void addDice(Dice dice) {
+    public void addDice(SimpleDice dice) {
         DiceList.add(dice);
         mDiceAdapter.notifyDataSetChanged();
     }
     public void callComplexDiceAddScreen() {
-        Intent intent = new Intent(mContext, DiceAddActivity.class);
-        startActivityForResult(intent, ADD_DICE_ACTIVITY);
+        Intent intent = new Intent(mContext, D20DiceAddActivity.class);
+        startActivityForResult(intent, ADD_D20DICE_ACTIVITY);
     }
     public void onSensorChanged(SensorEvent event) {
         // Get instance of Vibrator from current Context
@@ -508,7 +520,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         try {
             fis = openFileInput(FILENAME);
             in = new ObjectInputStream(fis);
-            DiceList = (ArrayList<Dice>) in.readObject();
+            DiceList = (ArrayList<SimpleDice>) in.readObject();
             in.close();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -537,6 +549,9 @@ public class rollingTable extends Activity implements SensorEventListener {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         loadPreferences();
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        //reset the adapter and attach the new one after a configuration change
+        mDiceAdapter = new DiceAdapter(this, DiceList);
+        DiceTable.setAdapter(mDiceAdapter);
     }
     @Override
     public void onAccuracyChanged(Sensor arg0, int arg1) {

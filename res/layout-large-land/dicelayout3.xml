@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/dice_layout_root"
-                android:layout_width="70dp"
-                android:layout_height="70dp">
+                android:layout_width="140dp"
+                android:layout_height="140dp">
     <ImageView
             android:id="@+id/dice_icon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:scaleType="centerInside"
             android:contentDescription="@string/empty"
             android:src="@drawable/d20b" />
@@ -15,7 +15,7 @@
             android:textIsSelectable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="40sp"
             android:textColor="#0000CC"
             android:layout_alignLeft="@id/dice_icon"
             android:layout_alignTop="@id/dice_icon"
@@ -26,7 +26,7 @@
             android:id="@+id/dice_mod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="40sp"
             android:textColor="#0000CC"
             android:layout_alignRight="@+id/dice_icon"
             android:layout_alignBottom="@+id/dice_icon"
@@ -36,12 +36,12 @@
             android:gravity="center_vertical"/>
     <TextView
             android:id="@+id/dice_result1"
-            android:layout_width="70dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/dice_icon"
             android:layout_centerHorizontal="true"
             android:layout_toRightOf="@id/dice_multi"
-            android:textSize="20sp"
+            android:textSize="40sp"
             android:singleLine="true"
             android:textIsSelectable="false"
             android:gravity="center_horizontal"/>
@@ -51,15 +51,15 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/dice_icon"
             android:layout_centerHorizontal="true"
-            android:textSize="20sp"
+            android:textSize="40sp"
             android:textIsSelectable="false"
             android:gravity="center_horizontal"/>
     <TextView
             android:id="@+id/dice_result"
             android:textIsSelectable="false"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:textSize="35sp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:textSize="70sp"
             android:textColor="#FF0000"
             android:layout_alignTop="@id/dice_icon"
             android:layout_alignParentRight="true"

@@ -31,7 +31,7 @@
                 android:value="com.k7m.yandr.rollingTable"/>
         </activity>
         <activity
-                android:name="com.k7m.yandr.DiceAddActivity"
+                android:name=".D20DiceAddActivity"
                 android:label="@string/dice_add_dialog_string"
                 android:parentActivityName="com.k7m.yandr.rollingTable">
             <meta-data

@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * @author Andy
  */
-public class Dice implements Serializable {
+public class D20Dice implements Serializable, SimpleDice {
     private String mName = null;
     private String mTitle;
     private Integer mModifier;			//The numerical modifier to add to the total result
@@ -23,7 +23,7 @@ public class Dice implements Serializable {
      * @param Sides The number of sides each dice will have
      * @param Modifier The positive number to add to the total
      */
-    public Dice(int Multiplier, int Sides, int Modifier) {
+    public D20Dice(int Multiplier, int Sides, int Modifier) {
         mModifier = Modifier;
         mSides = Sides;
         mMultiplier = Multiplier;
@@ -37,7 +37,7 @@ public class Dice implements Serializable {
      * @param Modifier The positive number to add to the total
      * @param newName The name of the dice.
      */
-    public Dice(int Multiplier, int Sides, int Modifier, String newName) {
+    public D20Dice(int Multiplier, int Sides, int Modifier, String newName) {
         mModifier = Modifier;
         mSides = Sides;
         mMultiplier = Multiplier;
@@ -101,18 +101,14 @@ public class Dice implements Serializable {
     /**
      * @return The total of the raw rolls, summed
      */
-    public int getResult() {
-        Integer total = 0;
-        for (int i = 0; i< mMultiplier; i++) {
-            total = total + mResult.get(i);
-        }
-        return total;
+    public String getResult() {
+        return String.valueOf(total());
     }
     /**
      * @return The total of the rolls + the modifier
      */
-    public int getTotal() {
-        return getResult() + mModifier;
+    public String getTotal() {
+        return String.valueOf(total() + mModifier);
     }
     /**
      * Run this to create our Result Vector, and fill it with 0 values to begin with.
@@ -170,10 +166,14 @@ public class Dice implements Serializable {
         sortResults();
     }
     public void sortResults() {
-        //ArrayList<Integer> sortedList = new ArrayList<Integer>();
-        //sortedList = getResultList();
         Collections.sort(mResult);
-        //mResult = sortedList;
+    }
+    private int total() {
+        Integer total = 0;
+        for (int i = 0; i< mMultiplier; i++) {
+            total = total + mResult.get(i);
+        }
+        return total;
     }
     /**
      * Returns the String representation of this object
@@ -192,12 +192,4 @@ public class Dice implements Serializable {
         }
         return value;
     }
-    /**
-     * Have the dice class draw the view depending on it's contents, settings, preferences etc..
-     * The adapter would simply call the dice to get it's own preferable graphical representation
-     */
-    //public View getView(int position, View convertView, ViewGroup parent) {
-        //Consider filling in if this becomes a thing.
-        //return convertView;
-    //}
 }

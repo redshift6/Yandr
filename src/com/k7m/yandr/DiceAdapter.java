@@ -19,7 +19,7 @@ public class DiceAdapter extends BaseAdapter {
 	public DiceAdapter(Context context) {
 		mContext = context;		
 	}
-	public DiceAdapter(Context context, ArrayList<Dice> list) {
+	public DiceAdapter(Context context, ArrayList<SimpleDice> list) {
 		mContext = context;
 		diceList = list;
 	}
@@ -36,7 +36,7 @@ public class DiceAdapter extends BaseAdapter {
 		return diceList.get(position).getSides();
 	}    
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Dice currentDie = diceList.get(position);
+		SimpleDice currentDie = diceList.get(position);
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout;
 		TextView t1,t2,t3,t4,t5;
@@ -67,15 +67,15 @@ public class DiceAdapter extends BaseAdapter {
             t3.setText(name);
         }
 		//Draw the results
-		if (currentDie.getResult() >0) {
-			Integer result;
+		if (Integer.valueOf(currentDie.getResult()) >0) {
+			String result;
 			if (sumTotals == true) {
 				result = currentDie.getTotal();
 			} else {
 				result = currentDie.getResult();
 			}
 			t5.setTextColor(Color.RED);
-			t5.setText(result.toString()); 	
+			t5.setText(result);
 		}
 		imageview.setImageResource(mThumbIds[currentDie.getSides()]);
 		return layout;
@@ -95,7 +95,7 @@ public class DiceAdapter extends BaseAdapter {
 			R.drawable.ic_star_w, R.drawable.d18g,
 			R.drawable.ic_star_w, R.drawable.d20g            
 	};
-	private ArrayList<Dice> diceList;
+	private ArrayList<SimpleDice> diceList;
 	private Boolean sumTotals = false;
 
 }

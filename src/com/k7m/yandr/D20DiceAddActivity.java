@@ -18,9 +18,9 @@ import java.util.ArrayList;
 /**
  * Created by Andy on 19/04/2014.
  */
-public class DiceAddActivity extends Activity {
+public class D20DiceAddActivity extends Activity {
 
-    private static int ADD_DICE_ACTIVITY = 1;
+    private static int ADD_D20DICE_ACTIVITY = 1;
     private static String NEW_DICE_NAME = "NEW_DICE_NAME";
     private static String NEW_DICE_MULTI = "NEW_DICE_MULTI";
     private static String NEW_DICE_SIDES = "NEW_DICE_SIDES";
