@@ -106,7 +106,7 @@ public final class R {
         public static final int viewdicedialog=0x7f030006;
     }
     public static final class menu {
-        public static final int menulayout=0x7f090000;
+        public static final int rollingtablemenulayout =0x7f090000;
     }
     public static final class raw {
         public static final int roll=0x7f050000;
