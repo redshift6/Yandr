@@ -39,15 +39,23 @@ public class DiceAdapter extends BaseAdapter {
 		SimpleDice currentDie = diceList.get(position);
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout;
-		TextView t1,t2,t3,t4,t5;
+
 		ImageView imageview;
 		if (convertView == null) {  // if it's not recycled(ie. null/incomplete), initialise some attributes    		
 			layout = new View(mContext);
 		} else {
 			layout = convertView;    			    
 		}
+		/*
+		if (currentDie instanceof D20Dice) {
+
+		} else if (currentDie instanceof ColourDice) {
+
+		} else return layout;
+		*/
+		TextView t1,t2,t3,t4,t5;
 		//now layout is a valid View object, we can start playing with it
-		layout = inflater.inflate(R.layout.dicelayout3, null, true); 
+		layout = inflater.inflate(R.layout.dicelayout3, null, true);
 		t1 = (TextView)layout.findViewById(R.id.dice_multi);
 		t2 = (TextView)layout.findViewById(R.id.dice_mod);
 		t3 = (TextView)layout.findViewById(R.id.dice_result1);
@@ -58,18 +66,19 @@ public class DiceAdapter extends BaseAdapter {
 		String mod = ((Integer)currentDie.getModifier()).toString();
         String name = currentDie.getName();
 		if (currentDie.getMultiplier() > 1) {
-			t1.setText(multi);	
+			t1.setText(multi);
 		}
 		if (currentDie.getModifier() != 0) {
 			t2.setText(mod);
-		}	
+		}
         if (name != null && name != "") {
             t3.setText(name);
         }
 		//Draw the results
-		if (Integer.valueOf(currentDie.getResult()) >0) {
+		Integer value = Integer.valueOf(currentDie.getResult());
+		if (value >0) {
 			String result;
-			if (sumTotals == true) {
+			if (sumTotals) {
 				result = currentDie.getTotal();
 			} else {
 				result = currentDie.getResult();
