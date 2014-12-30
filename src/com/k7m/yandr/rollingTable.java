@@ -39,7 +39,6 @@ import java.util.Random;
  * TODO: implement a colour dice, to choose a colour from a list of colours
  * TODO: rework the addDice screen to handle various SimpleDice implementations
  * TODO: investigate shake-less functionality and additional checks to functionality and ui elements
- * TODO: BUG: investigate why totals are not being drawn properly
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
@@ -598,9 +597,10 @@ public class rollingTable extends Activity implements SensorEventListener {
     protected void onResume() {
         super.onResume();
         initAudio();
+        attachAdapter();
         loadAndApplyPreferences();
         checkAndAttachSensors();
-        attachAdapter();
+
     }
     @Override
     public void onAccuracyChanged(Sensor arg0, int arg1) {
