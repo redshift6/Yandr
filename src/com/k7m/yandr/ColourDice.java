@@ -35,17 +35,17 @@ public class ColourDice implements SimpleDice, Serializable {
         mName = newName;
     }
     @Override
-    public int getSides() {
+    public Integer getSides() {
         return mSides;
     }
 
     @Override
-    public int getModifier() {
+    public Integer getModifier() {
         return mModifier;
     }
 
     @Override
-    public int getMultiplier() {
+    public Integer getMultiplier() {
         return mMultiplier;
     }
 

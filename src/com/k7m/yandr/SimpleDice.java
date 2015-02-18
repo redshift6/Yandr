@@ -8,17 +8,17 @@ public interface SimpleDice {
     /**
      * @return The number of sides in this dice instance
      */
-    public int getSides();
+    public Integer getSides();
 
     /**
      * @return The modifier to the total dice sum
      */
-    public int getModifier();
+    public Integer getModifier();
 
     /**
      * @return The number of dice in this instance
      */
-    public int getMultiplier();
+    public Integer getMultiplier();
 
     /**
      * @return The total of the raw rolls, summed

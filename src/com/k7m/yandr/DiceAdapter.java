@@ -46,13 +46,49 @@ public class DiceAdapter extends BaseAdapter {
 		} else {
 			layout = convertView;    			    
 		}
-		/*
-		if (currentDie instanceof D20Dice) {
 
+		if (currentDie instanceof D20Dice) {
+			//currentDie = (D20Dice) currentDie;
+			TextView t1,t2,t3,t4,t5;
+			//now layout is a valid View object, we can start playing with it
+			layout = inflater.inflate(R.layout.dicelayout3, null, true);
+			t1 = (TextView)layout.findViewById(R.id.dice_multi);
+			t2 = (TextView)layout.findViewById(R.id.dice_mod);
+			t3 = (TextView)layout.findViewById(R.id.dice_result1);
+			t4 = (TextView)layout.findViewById(R.id.dice_result2);
+			t5 = (TextView)layout.findViewById(R.id.dice_result);
+			imageview = (ImageView)layout.findViewById(R.id.dice_icon);
+			String multi = ((Integer)currentDie.getMultiplier()).toString();
+			String mod = ((Integer)currentDie.getModifier()).toString();
+			String name = currentDie.getName();
+			if (currentDie.getMultiplier() > 1) {
+				t1.setText(multi);
+			}
+			if (currentDie.getModifier() != 0) {
+				t2.setText(mod);
+			}
+			if (name != null && name != "") {
+				t3.setText(name);
+			}
+			//Draw the results
+			Integer value = Integer.valueOf(currentDie.getResult());
+			if (value >0) {
+				String result;
+				if (sumTotals) {
+					result = currentDie.getTotal();
+				} else {
+					result = currentDie.getResult();
+				}
+				t5.setTextColor(Color.RED);
+				t5.setText(result);
+			}
+			imageview.setImageResource(mThumbIds[currentDie.getSides()]);
+			return layout;
 		} else if (currentDie instanceof ColourDice) {
 
-		} else return layout;
-		*/
+		}
+		return layout;
+		/*
 		TextView t1,t2,t3,t4,t5;
 		//now layout is a valid View object, we can start playing with it
 		layout = inflater.inflate(R.layout.dicelayout3, null, true);
@@ -87,7 +123,7 @@ public class DiceAdapter extends BaseAdapter {
 			t5.setText(result);
 		}
 		imageview.setImageResource(mThumbIds[currentDie.getSides()]);
-		return layout;
+		return layout;*/
 	}
 	public void setSumTotals(Boolean totals) {
 		sumTotals = totals;

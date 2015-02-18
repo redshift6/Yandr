@@ -94,13 +94,13 @@ public class rollingTable extends Activity implements SensorEventListener {
     public long mCummulativeTrigger = 20; //consider as a setting
 
     // Dice_Edit_Dialog Number_Picker max and min values
-    private final static int MinDiceMulti = 1;
-    private final static int MaxDiceMulti = 9;
-    private final static int MinDiceMod = 0;
-    private final static int MaxDiceMod = 100;
+    private final static Integer MinDiceMulti = 1;
+    private final static Integer MaxDiceMulti = 9;
+    private final static Integer MinDiceMod = 0;
+    private final static Integer MaxDiceMod = 100;
     // Dice Arrays for Dice sides and text representations
     private String[] mDiceSides;
-    private int[] mDiceSidesInt;
+    private Integer[] mDiceSidesInt;
 
     // Sound variables
     private MediaPlayer mPlayer;
@@ -144,8 +144,18 @@ public class rollingTable extends Activity implements SensorEventListener {
             }
         });
         mDiceSides = getResources().getStringArray(R.array.dice_sides_string_array);
-        mDiceSidesInt = getResources().getIntArray(R.array.dice_sides_integer_array);
+        mDiceSidesInt = getIntegerArray(getResources().getIntArray(R.array.dice_sides_integer_array));
+
     }
+
+    private Integer[] getIntegerArray(int[] baseArray) {
+        Integer[] result = new Integer[baseArray.length];
+        for (int i = 0; i< baseArray.length; i++) {
+            result[i] = Integer.valueOf(baseArray[i]);
+        }
+        return result;
+    }
+
     private void loadAndApplyPreferences() {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         muteLock = sharedPref.getBoolean("pref_mute", false);

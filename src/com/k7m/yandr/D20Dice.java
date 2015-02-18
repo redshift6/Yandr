@@ -49,21 +49,21 @@ public class D20Dice implements Serializable, SimpleDice {
      *
      * @return The number of sides in this dice instance
      */
-    public int getSides() {
+    public Integer getSides() {
         return mSides;
     }
     /**
      *
      * @return The modifier to the total dice sum
      */
-    public int getModifier() {
+    public Integer getModifier() {
         return mModifier;
     }
     /**
      *
      * @return The number of dice in this instance
      */
-    public int getMultiplier() {
+    public Integer getMultiplier() {
         return mMultiplier;
     }
     /**
@@ -168,7 +168,7 @@ public class D20Dice implements Serializable, SimpleDice {
     public void sortResults() {
         Collections.sort(mResult);
     }
-    private int total() {
+    private Integer total() {
         Integer total = 0;
         for (int i = 0; i< mMultiplier; i++) {
             total = total + mResult.get(i);
