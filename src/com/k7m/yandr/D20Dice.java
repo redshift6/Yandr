@@ -1,6 +1,8 @@
 package com.k7m.yandr;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -157,7 +159,8 @@ public class D20Dice implements Serializable, SimpleDice {
     public void roll() {
         Calendar c = Calendar.getInstance();
         int mSecond = c.get(Calendar.MILLISECOND);
-        Random rand = new Random(mSecond);
+        byte[] ba = ByteBuffer.allocate(4).putInt(mSecond).array();
+        Random rand = new SecureRandom(ba);
         int randNumber;
         for (int i = 0; i< mMultiplier; i++) {
             randNumber = rand.nextInt(mSides)+1;
