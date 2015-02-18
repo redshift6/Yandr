@@ -221,7 +221,7 @@ public class rollingTable extends Activity implements SensorEventListener {
             text1.setText(dice.getTitle());
             text2.setText(dice.getTitleAndResult());
             text3.setText(dice.getTitleAndTotal());
-        } else if (dice instanceof TTRStartDice) {
+        } else if (dice instanceof ColourDice) {
             dialog.setTitle(dice.getRepresentativeTitle());
             if (dice.getResult() != null) {
                 image.setImageDrawable(new ColorDrawable(Color.parseColor(dice.getResult())));
@@ -282,7 +282,7 @@ public class rollingTable extends Activity implements SensorEventListener {
     }
 
     public void addTTR() {
-        DiceList.add(new TTRStartDice());
+        DiceList.add(new ColourDice());
         mDiceAdapter.notifyDataSetChanged();
     }
     public void editDice(final int position) {
@@ -427,7 +427,7 @@ public class rollingTable extends Activity implements SensorEventListener {
                 }*/
             } else if (requestCode == ADD_COLOURDICE_ACTIVITY) {
                 if (resultCode == RESULT_OK) {
-                    SimpleDice dice = new TTRStartDice();
+                    SimpleDice dice = new ColourDice();
                     //data.getIntExtra(NEW_DICE_MULTI, 1),
                     //data.getIntExtra(NEW_DICE_SIDES, 1),
                     //data.getIntExtra(NEW_DICE_MOD, 1),

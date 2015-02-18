@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * Created by aso on 09-12-2014.
  */
-public class TTRStartDice implements SimpleDice, Serializable {
+public class ColourDice implements SimpleDice, Serializable {
 
     private String mName = null;
     private String mTitle;
@@ -22,7 +22,7 @@ public class TTRStartDice implements SimpleDice, Serializable {
     private ArrayList<String> mColors;	//The Arraylist holding the dice in this instance
     private Integer mResult;              //The color we rolled
 
-    public TTRStartDice() {
+    public ColourDice() {
         mMultiplier = 1;
         mSides = 5;
         mResult = null;
@@ -34,7 +34,7 @@ public class TTRStartDice implements SimpleDice, Serializable {
         mColors.add("YELLOW");
     }
 
-    public TTRStartDice(int Multiplier, int Sides, int Modifier, String newName) {
+    public ColourDice(int Multiplier, int Sides, int Modifier, String newName) {
         mModifier = Modifier;
         mSides = Sides;
         mMultiplier = Multiplier;

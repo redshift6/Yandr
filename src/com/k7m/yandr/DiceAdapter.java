@@ -85,8 +85,8 @@ public class DiceAdapter extends BaseAdapter {
 			}
 			imageview.setImageResource(mThumbIds[currentDie.getSides()]);
 			return layout;
-		} else if (currentDie instanceof TTRStartDice) {
-			layout = inflater.inflate(R.layout.ttrstartdice, null, true);
+		} else if (currentDie instanceof ColourDice) {
+			layout = inflater.inflate(R.layout.colourdice, null, true);
 			imageview = (ImageView)layout.findViewById(R.id.dice_icon);
 			if (currentDie.getResult() != null) {
 				imageview.setImageDrawable(new ColorDrawable(Color.parseColor(currentDie.getResult())));
