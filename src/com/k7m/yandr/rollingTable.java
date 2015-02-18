@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -209,17 +211,24 @@ public class rollingTable extends Activity implements SensorEventListener {
         Dialog dialog;
         dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.viewdicedialog);
-        //dialog.setTitle(dice.getTitle() + "=" + dice.getTotal());
-        dialog.setTitle(dice.getRepresentativeTitle());
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(mDiceAdapter.getDiceIconFromPosition(position));
         TextView text1 = (TextView) dialog.findViewById(R.id.text1);
-        text1.setText(dice.getTitle());
         TextView text2 = (TextView) dialog.findViewById(R.id.text2);
-        text2.setText(dice.getTitleAndResult());
         TextView text3 = (TextView) dialog.findViewById(R.id.text3);
-        //text3.setText(dice.getTitle() + " = " + dice.getResult() + " + " + dice.getModifier() + " = " + dice.getTotal());
-        text3.setText(dice.getTitleAndTotal());
+        if (dice instanceof D20Dice) {
+            dialog.setTitle(dice.getRepresentativeTitle());
+            image.setImageResource(mDiceAdapter.getDiceIconFromPosition(position));
+            text1.setText(dice.getTitle());
+            text2.setText(dice.getTitleAndResult());
+            text3.setText(dice.getTitleAndTotal());
+        } else if (dice instanceof TTRStartDice) {
+            dialog.setTitle(dice.getRepresentativeTitle());
+            if (dice.getResult() != null) {
+                image.setImageDrawable(new ColorDrawable(Color.parseColor(dice.getResult())));
+                text2.setText(dice.getTitleAndResult());
+            } else image.setImageResource(R.drawable.dttr);
+        }
+
         dialog.show();
     }
     /**
@@ -270,6 +279,11 @@ public class rollingTable extends Activity implements SensorEventListener {
         builder.setView(layout);
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void addTTR() {
+        DiceList.add(new TTRStartDice());
+        mDiceAdapter.notifyDataSetChanged();
     }
     public void editDice(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -372,6 +386,9 @@ public class rollingTable extends Activity implements SensorEventListener {
             case R.id.menu_add_dice:
                 addDice();
                 return true;
+            case R.id.menu_add_ttr:
+                addTTR();
+                return true;
             case R.id.menu_roll_dice:
                 generateRandom(DICE_ROLLING_SOURCE);
                 return true;
@@ -410,7 +427,7 @@ public class rollingTable extends Activity implements SensorEventListener {
                 }*/
             } else if (requestCode == ADD_COLOURDICE_ACTIVITY) {
                 if (resultCode == RESULT_OK) {
-                    SimpleDice dice = new ColourDice();
+                    SimpleDice dice = new TTRStartDice();
                     //data.getIntExtra(NEW_DICE_MULTI, 1),
                     //data.getIntExtra(NEW_DICE_SIDES, 1),
                     //data.getIntExtra(NEW_DICE_MOD, 1),

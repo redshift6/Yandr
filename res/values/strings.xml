@@ -12,6 +12,7 @@
     
     <string name="clear_screen">Clear Screen</string>
     <string name="dice_add_dialog_string">Add Die</string>
+    <string name="add_ttr">Add TTR Start Die</string>
     <string name="dice_add_complex_dialog_string">Add Complex Die</string>
     <string name="dice_edit_dialog_string">Edit Die</string>
     <string name="short_clear">Clear</string>

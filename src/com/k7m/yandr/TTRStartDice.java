@@ -3,6 +3,8 @@ package com.k7m.yandr;
 import android.graphics.Color;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -10,28 +12,32 @@ import java.util.Random;
 /**
  * Created by aso on 09-12-2014.
  */
-public class ColourDice implements SimpleDice, Serializable {
+public class TTRStartDice implements SimpleDice, Serializable {
 
     private String mName = null;
     private String mTitle;
     private Integer mModifier;			//The numerical modifier to add to the total result
     private Integer mSides;				//The number of sides a dice/set of dice have
     private Integer mMultiplier;		//The number of dice in this instance
-    private ArrayList<Integer> mColors;	//The Arraylist holding the dice in this instance
+    private ArrayList<String> mColors;	//The Arraylist holding the dice in this instance
     private Integer mResult;              //The color we rolled
 
-    public ColourDice() {
-        mColors.add(Color.BLACK);
-        mColors.add(Color.RED);
-        mColors.add(Color.BLUE);
-        mColors.add(Color.GREEN);
-        mColors.add(Color.YELLOW);
+    public TTRStartDice() {
+        mMultiplier = 1;
+        mSides = 5;
+        mResult = null;
+        mColors = new ArrayList<String>();
+        mColors.add("BLACK");
+        mColors.add("RED");
+        mColors.add("BLUE");
+        mColors.add("GREEN");
+        mColors.add("YELLOW");
     }
 
-    public ColourDice(int Multiplier, int Sides, int Modifier, String newName) {
+    public TTRStartDice(int Multiplier, int Sides, int Modifier, String newName) {
         mModifier = Modifier;
         mSides = Sides;
-        mMultiplier = 1;
+        mMultiplier = Multiplier;
         mName = newName;
     }
     @Override
@@ -51,7 +57,10 @@ public class ColourDice implements SimpleDice, Serializable {
 
     @Override
     public String getResult() {
-        return mColors.get(mResult).toString();
+        if (mResult != null) {
+            return mColors.get(mResult).toString();
+        }
+        return null;
     }
 
     @Override
@@ -83,10 +92,11 @@ public class ColourDice implements SimpleDice, Serializable {
     public void roll() {
         Calendar c = Calendar.getInstance();
         int mSecond = c.get(Calendar.MILLISECOND);
-        Random rand = new Random(mSecond);
+        byte[] ba = ByteBuffer.allocate(4).putInt(mSecond).array();
+        Random rand = new SecureRandom(ba);
         int randNumber;
         for (int i = 0; i< mMultiplier; i++) {
-            randNumber = rand.nextInt(mSides)+1;
+            randNumber = rand.nextInt(mSides);
             mResult = randNumber;
         }
         sortResults();
@@ -109,12 +119,19 @@ public class ColourDice implements SimpleDice, Serializable {
 
     @Override
     public String getRepresentativeTitle() {
-        return null;
+        if (mResult != null) {
+            return mColors.get(mResult);
+        }
+        return "";
+
     }
 
     @Override
     public String getTitleAndResult() {
-        return null;
+        if (mResult != null) {
+            return "    " + mColors.get(mResult) + " should start.";
+        }
+        return "";
     }
 
     @Override
