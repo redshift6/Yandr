@@ -2,6 +2,7 @@ package com.k7m.yandr;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -30,6 +31,12 @@ public class SettingsActivity extends PreferenceActivity implements  OnSharedPre
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPref.getBoolean("pref_rotate", false)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        }
 		addPreferencesFromResource(R.xml.preferences);
 	}
 	/*
