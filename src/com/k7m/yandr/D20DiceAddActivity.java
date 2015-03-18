@@ -9,8 +9,7 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ public class D20DiceAddActivity extends Activity {
 
     private Boolean screenLock;
 
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,30 @@ public class D20DiceAddActivity extends Activity {
         editText = (EditText) findViewById(R.id.nameDiceText);
         editText.setText("");
     }
-    public void addDice(View view) {
+
+    /**
+     * Add the menu options
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.addmenulayout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.menu_add_dice:
+                addDice();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void addDice() {
         Intent intent = new Intent();
         if (editText.getText().toString() != null) {
             intent.putExtra(NEW_DICE_NAME, editText.getText().toString());

@@ -7,49 +7,30 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="20dp">
+    <EditText
+            android:id="@+id/nameDiceText"
+            android:editable="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:hint="@string/namehint"
+            android:text="@string/empty"/>
     <NumberPicker
             android:id="@+id/sidespicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/nameDiceText"
             android:layout_centerHorizontal="true"/>
     <NumberPicker
             android:id="@+id/multipicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/nameDiceText"
             android:layout_toLeftOf="@id/sidespicker"/>
     <NumberPicker
             android:id="@+id/modpicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/nameDiceText"
             android:layout_toRightOf="@id/sidespicker"/>
-    <TextView
-            android:id="@+id/nameDice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:layout_below="@id/sidespicker"
-            android:layout_centerHorizontal="true"
-            android:text="@string/name"/>
-    <EditText
-            android:id="@+id/nameDiceText"
-            android:editable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/nameDice"
-            android:layout_alignParentLeft="true"
-            android:hint="@string/namehint"
-            android:text="@string/empty"/>
-    <Button
-            android:id="@+id/addDice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dice_add_dialog_string"
-            android:layout_below="@id/nameDice"
-            android:layout_toRightOf="@id/nameDiceText"
-            android:layout_alignParentRight="true"
-            android:layout_alignBottom="@id/nameDiceText"
-            android:onClick="addDice"/>
 </RelativeLayout>

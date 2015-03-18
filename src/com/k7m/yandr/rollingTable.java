@@ -34,13 +34,9 @@ import java.util.Random;
 /*TODO: 
  * YetANotherDiceRoller(YANDR)(Yet Another Native Dice Roller)('yandere' or 'yandir')
  * TODO: Complete the DiceAddActivity, with all the additional options it will use
- * TODO: make all user interface elements a fragment
- * TODO: Make dialogs separate classes with Dice parameters
- * TODO: make ui elements into reusable ui components
  * TODO: code cleanup, especially in the settings page.
  * TODO: implement a colour dice, to choose a colour from a list of colours
  * TODO: rework the addDice screen to handle various SimpleDice implementations
- * TODO: investigate shake-less functionality and additional checks to functionality and ui elements
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
@@ -384,7 +380,8 @@ public class rollingTable extends Activity implements SensorEventListener {
                 clearScreen();
                 return true;
             case R.id.menu_add_dice:
-                addDice();
+                //addDice();
+                callComplexDiceAddScreen(ADD_D20DICE_ACTIVITY);
                 return true;
             case R.id.menu_add_ttr:
                 addTTR();

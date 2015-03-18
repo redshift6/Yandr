@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-            android:key="pref_mute"
-            android:title="@string/pref_mute"
-            android:summary="@string/pref_mute_summ"
-            android:defaultValue="true" />
-    <CheckBoxPreference
-            android:key="pref_still"
-            android:title="@string/pref_still"
-            android:summary="@string/pref_still_summ"
-            android:defaultValue="true" />
-    <CheckBoxPreference
-            android:key="pref_force_wake"
-            android:title="@string/pref_force_wake"
-            android:summary="@string/pref_force_wake_summ"
-            android:defaultValue="false" />
-    <CheckBoxPreference
-            android:key="pref_rotate"
-            android:title="@string/pref_rotate"
-            android:summary="@string/pref_rotate_summ"
-            android:defaultValue="false" />
-    <CheckBoxPreference
-            android:key="pref_sum_totals"
-            android:title="@string/pref_sum_totals"
-            android:summary="@string/pref_sum_totals_summ"
-            android:defaultValue="true" />
+    <PreferenceCategory
+        android:title="@string/pref_feedback"
+        android:key="pref_feedback_settings">
+        <CheckBoxPreference
+                android:key="pref_mute"
+                android:title="@string/pref_mute"
+                android:summary="@string/pref_mute_summ"
+                android:defaultValue="true" />
+        <CheckBoxPreference
+                android:key="pref_still"
+                android:title="@string/pref_still"
+                android:summary="@string/pref_still_summ"
+                android:defaultValue="true" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_display"
+        android:key="pref_display_settings">
+        <CheckBoxPreference
+                android:key="pref_force_wake"
+                android:title="@string/pref_force_wake"
+                android:summary="@string/pref_force_wake_summ"
+                android:defaultValue="false" />
+        <CheckBoxPreference
+                android:key="pref_rotate"
+                android:title="@string/pref_rotate"
+                android:summary="@string/pref_rotate_summ"
+                android:defaultValue="false" />
+        <CheckBoxPreference
+                android:key="pref_sum_totals"
+                android:title="@string/pref_sum_totals"
+                android:summary="@string/pref_sum_totals_summ"
+                android:defaultValue="true" />
+    </PreferenceCategory>
 </PreferenceScreen>

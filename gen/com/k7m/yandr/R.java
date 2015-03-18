@@ -67,7 +67,6 @@ public final class R {
         public static final int DiceView=0x7f0a0015;
         public static final int about_id=0x7f0a001e;
         public static final int aboutauthor=0x7f0a0000;
-        public static final int addDice=0x7f0a000b;
         public static final int artcredits=0x7f0a0001;
         public static final int atributelink=0x7f0a0004;
         public static final int attribution1=0x7f0a0002;

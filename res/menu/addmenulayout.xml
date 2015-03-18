@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:id="@+id/menu_add_dice"
+              android:showAsAction="always"
+              android:icon="@drawable/d20gadd"
+              android:title="@string/dice_add_dialog_string" />
+</menu>
