@@ -13,7 +13,8 @@
     <string name="clear_screen">Clear Screen</string>
     <string name="dice_add_dialog_string">Add Die</string>
     <string name="add_ttr">Add Colour Die</string>
-    <string name="dice_add_complex_dialog_string">Add Complex Die</string>
+    <string name="dice_add_complex_dialog_string">Add D20 Die</string>
+    <string name="dice_add_colour_dialog_string">Add Colour Die</string>
     <string name="dice_edit_dialog_string">Edit Die</string>
     <string name="short_clear">Clear</string>
     <string name="short_add">Add</string>
@@ -53,5 +54,7 @@
 
     <string name="name">Name</string>
     <string name="namehint">Give the dice a name.</string>
+    <string name="available_colours">Available colours</string>
+    <string name="chosen_colours">Chosen colours</string>
 
 </resources>

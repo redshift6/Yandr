@@ -37,14 +37,18 @@ import java.util.Random;
  * TODO: code cleanup, especially in the settings page.
  * TODO: implement a colour dice, to choose a colour from a list of colours
  * TODO: rework the addDice screen to handle various SimpleDice implementations
+ * TODO: investigate GridLayout
  */
 public class rollingTable extends Activity implements SensorEventListener {
     // Menu variables
     private static int ADD_D20DICE_ACTIVITY = 11;
-    //private static int EDIT_D20DICE_ACTIVITY = 12;
+    private static int EDIT_D20DICE_ACTIVITY = 12;
     private static int ADD_COLOURDICE_ACTIVITY = 21;
+    private static int EDIT_COLOURDICE_ACTIVITY = 22;
+    private static int ADD_TASK = 1;
+    private static int EDIT_TASK = 2;
 
-    private static int DICE_ROLLING_SOURCE = 1;
+    private static int DICE_ROLLING_SOURCE = -2;
     private static int VIBRATE_DURATION = 200;
 
     //Context menu item IDs
@@ -58,6 +62,8 @@ public class rollingTable extends Activity implements SensorEventListener {
     private static String NEW_DICE_MULTI = "NEW_DICE_MULTI";
     private static String NEW_DICE_SIDES = "NEW_DICE_SIDES";
     private static String NEW_DICE_MOD = "NEW_DICE_MOD";
+    private static String NEW_DICE_COLOURS = "NEW_DICE_COLOURS";
+    private static String TASK = "TASK";
 
     //Edit dice activity IDs
     //private static String EDIT_DICE_NAME = "EDIT_DICE_NAME";
@@ -65,6 +71,7 @@ public class rollingTable extends Activity implements SensorEventListener {
     //private static String EDIT_DICE_SIDES = "EDIT_DICE_SIDES";
     //private static String EDIT_DICE_MOD = "EDIT_DICE_MOD";
     //private static String EDIT_DICE_POSITION = "EDIT_DICE_POSITION";
+    //private static String EDIT_DICE_COLOURS = "EDIT_DICE_COLOURS";
 
     //Dice save file name
     private static String FILENAME = "YANDRARRAY.dat";
@@ -131,7 +138,7 @@ public class rollingTable extends Activity implements SensorEventListener {
         mShakeLock = (CheckBox) findViewById(R.id.switch1);
         mShakeLock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mRollLock = isChecked;
+                mRollLock = isChecked;
             }
         });
         mShakeLock.setChecked(true);
@@ -335,11 +342,11 @@ public class rollingTable extends Activity implements SensorEventListener {
 
     }
     public void generateRandom(int i) {
-        //if i is less than 0, do all dice rolls here, if >=0, do specified dice rolls at the dice class level
+        //if i is less than 0, do all dice rolls here, if =0, do specified dice rolls at the dice class level
         // Use an i of -1 to generate all random values in one place from one rand seed
         if (!DiceList.isEmpty()) {
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            if (i<0){
+            if (i==-1){
                 Random rand = new Random();
                 int randNumber;
                 for (SimpleDice dice : DiceList) {
@@ -350,11 +357,14 @@ public class rollingTable extends Activity implements SensorEventListener {
                     dice.sortResults();
                 }
             }
-            // Use an i of >=0 to delegate all randoming to each individual dice instance
-            if (i>=0){
+            // Use an i of =0 to delegate all randoming to each individual dice instance
+            if (i==-2){
                 for (SimpleDice dice : DiceList) {
                     dice.roll();
                 }
+            }
+            if (i>=0){
+                DiceList.get(i).roll();
             }
             mDiceAdapter.notifyDataSetChanged();
             playAudio();
@@ -380,11 +390,10 @@ public class rollingTable extends Activity implements SensorEventListener {
                 clearScreen();
                 return true;
             case R.id.menu_add_dice:
-                //addDice();
                 callComplexDiceAddScreen(ADD_D20DICE_ACTIVITY);
                 return true;
             case R.id.menu_add_ttr:
-                addTTR();
+                callComplexDiceAddScreen(ADD_COLOURDICE_ACTIVITY);
                 return true;
             case R.id.menu_roll_dice:
                 generateRandom(DICE_ROLLING_SOURCE);
@@ -403,37 +412,23 @@ public class rollingTable extends Activity implements SensorEventListener {
         }
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_D20DICE_ACTIVITY) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ADD_D20DICE_ACTIVITY) {
                 SimpleDice dice = new D20Dice(
                         data.getIntExtra(NEW_DICE_MULTI, 1),
                         data.getIntExtra(NEW_DICE_SIDES, 1),
                         data.getIntExtra(NEW_DICE_MOD, 1),
                         data.getStringExtra(NEW_DICE_NAME));
                 addDice(dice);
-            /*} else if (requestCode == EDIT_D20DICE_ACTIVITY) {
-                if (resultCode == RESULT_OK) {
-                    Integer position = data.getIntExtra(EDIT_DICE_POSITION, DiceList.size());
-                    SimpleDice dice = new D20Dice(
-                            data.getIntExtra(EDIT_DICE_MULTI, DiceList.get(position).getMultiplier()),
-                            data.getIntExtra(EDIT_DICE_SIDES, DiceList.get(position).getSides()),
-                            data.getIntExtra(EDIT_DICE_MOD, DiceList.get(position).getModifier()),
-                            data.getStringExtra(EDIT_DICE_NAME));
-                    DiceList.set(position, dice);
-                    mDiceAdapter.notifyDataSetChanged();
-                }*/
             } else if (requestCode == ADD_COLOURDICE_ACTIVITY) {
-                if (resultCode == RESULT_OK) {
-                    SimpleDice dice = new ColourDice();
-                    //data.getIntExtra(NEW_DICE_MULTI, 1),
-                    //data.getIntExtra(NEW_DICE_SIDES, 1),
-                    //data.getIntExtra(NEW_DICE_MOD, 1),
-                    //data.getStringExtra(NEW_DICE_NAME));
-                    //addDice(dice);
-                }
+                String name = data.getStringExtra(NEW_DICE_NAME);
+                String[] colours = data.getStringArrayExtra(NEW_DICE_COLOURS);
+                SimpleDice dice = new ColourDice(name, colours);
+                addDice(dice);
             }
         }
     }
+
     public void clearScreen() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.prompt_clear_table).setCancelable(true).setPositiveButton(R.string.prompt_yes, new DialogInterface.OnClickListener() {
@@ -507,10 +502,13 @@ public class rollingTable extends Activity implements SensorEventListener {
         mDiceAdapter.notifyDataSetChanged();
     }
     public void callComplexDiceAddScreen(Integer func) {
-        Intent intent = new Intent(mContext, D20DiceAddActivity.class);
-        /*if (func.equals(EDIT_D20DICE_ACTIVITY)) {
-            intent.putExtra(EDIT_DICE_POSITION,position);
-        }*/
+        Intent intent = null;
+        if (func.equals(ADD_D20DICE_ACTIVITY)) {
+            intent = new Intent(mContext, D20DiceAddActivity.class);
+        }
+        if (func.equals(ADD_COLOURDICE_ACTIVITY)) {
+            intent = new Intent(mContext, ColourDiceAddActivity.class);
+        }
         startActivityForResult(intent, func);
     }
     public void onSensorChanged(SensorEvent event) {

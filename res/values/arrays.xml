@@ -11,6 +11,28 @@
         <item>d18</item>
         <item>d20</item>
     </string-array>
+    <string-array name="dice_colours_string_array">
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>black</item>
+        <item>white</item>
+        <item>gray</item>
+        <item>cyan</item>
+        <item>magenta</item>
+        <item>yellow</item>
+        <item>grey</item>
+        <item>lightgrey</item>
+        <item>darkgrey</item>
+        <item>aqua</item>
+        <item>lime</item>
+        <item>maroon</item>
+        <item>navy</item>
+        <item>olive</item>
+        <item>purple</item>
+        <item>silver</item>
+        <item>teal</item>
+    </string-array>
     <integer-array name="dice_sides_integer_array">
         <item>4</item>
         <item>6</item>

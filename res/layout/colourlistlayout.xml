@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+        android:padding="5dp">
+    <TextView
+            android:id="@+id/colour_name"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="lightgrey"/>
+    <ImageView
+            android:id="@+id/colour_preview"
+            android:layout_width="26dp"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/colour_name"
+            android:layout_alignTop="@id/colour_name"
+            android:layout_toRightOf="@id/colour_name"/>
+</RelativeLayout>
