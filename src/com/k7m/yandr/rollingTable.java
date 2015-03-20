@@ -511,11 +511,11 @@ public class rollingTable extends Activity implements SensorEventListener {
             intent = new Intent(mContext, D20DiceAddActivity.class);
         }
         if (func.equals(ADD_COLOURDICE_ACTIVITY)) {
-            intent = new Intent(mContext, ColourDiceAddActivity.class);
+            intent = new Intent(mContext, ColourDiceActivity.class);
         }
         if (func.equals(EDIT_COLOURDICE_ACTIVITY)) {
             if (position >=0) {
-                intent = new Intent(mContext, ColourDiceAddActivity.class);
+                intent = new Intent(mContext, ColourDiceActivity.class);
                 intent.putExtra(TASK, EDIT_TASK);
                 intent.putExtra(EDIT_POSITION, position);
                 ColourDice colourDice = (ColourDice)DiceList.get(position);

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by Andy on 19/04/2014.
  * TODO: this is the ColourDice adder.
  */
-public class ColourDiceAddActivity extends BasicDiceAddActivity {
+public class ColourDiceActivity extends BasicDiceActivity {
 
     // App variables
     private Context mContext;

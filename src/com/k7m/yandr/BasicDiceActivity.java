@@ -13,7 +13,7 @@ import android.widget.NumberPicker;
 /**
  * Created by Andy on 19/04/2014.
  */
-public abstract class BasicDiceAddActivity extends Activity {
+public abstract class BasicDiceActivity extends Activity {
 
     static int ADD_D20DICE_ACTIVITY = 11;
     static int EDIT_D20DICE_ACTIVITY = 12;

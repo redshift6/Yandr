@@ -39,7 +39,7 @@
                     android:value="com.k7m.yandr.rollingTable"/>
         </activity>
         <activity
-                android:name=".ColourDiceAddActivity"
+                android:name=".ColourDiceActivity"
                 android:label="@string/dice_add_colour_dialog_string"
                 android:windowSoftInputMode="stateHidden"
                 android:parentActivityName="com.k7m.yandr.rollingTable">
