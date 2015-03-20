@@ -64,14 +64,7 @@ public class rollingTable extends Activity implements SensorEventListener {
     private static String NEW_DICE_MOD = "NEW_DICE_MOD";
     private static String NEW_DICE_COLOURS = "NEW_DICE_COLOURS";
     private static String TASK = "TASK";
-
-    //Edit dice activity IDs
-    //private static String EDIT_DICE_NAME = "EDIT_DICE_NAME";
-    //private static String EDIT_DICE_MULTI = "EDIT_DICE_MULTI";
-    //private static String EDIT_DICE_SIDES = "EDIT_DICE_SIDES";
-    //private static String EDIT_DICE_MOD = "EDIT_DICE_MOD";
-    //private static String EDIT_DICE_POSITION = "EDIT_DICE_POSITION";
-    //private static String EDIT_DICE_COLOURS = "EDIT_DICE_COLOURS";
+    private static String EDIT_POSITION = "EDIT_POSITION";
 
     //Dice save file name
     private static String FILENAME = "YANDRARRAY.dat";
@@ -225,7 +218,7 @@ public class rollingTable extends Activity implements SensorEventListener {
             text2.setText(dice.getTitleAndResult());
             text3.setText(dice.getTitleAndTotal());
         } else if (dice instanceof ColourDice) {
-            dialog.setTitle(dice.getRepresentativeTitle());
+            dialog.setTitle(dice.getName());
             if (dice.getResult() != null) {
                 image.setImageDrawable(new ColorDrawable(Color.parseColor(dice.getResult())));
                 text2.setText(dice.getTitleAndResult());
@@ -390,16 +383,16 @@ public class rollingTable extends Activity implements SensorEventListener {
                 clearScreen();
                 return true;
             case R.id.menu_add_dice:
-                callComplexDiceAddScreen(ADD_D20DICE_ACTIVITY);
+                callComplexDiceAddScreen(ADD_D20DICE_ACTIVITY, 0);
                 return true;
             case R.id.menu_add_ttr:
-                callComplexDiceAddScreen(ADD_COLOURDICE_ACTIVITY);
+                callComplexDiceAddScreen(ADD_COLOURDICE_ACTIVITY, 0);
                 return true;
             case R.id.menu_roll_dice:
                 generateRandom(DICE_ROLLING_SOURCE);
                 return true;
             case R.id.menu_activity_add_dice:
-                callComplexDiceAddScreen(ADD_D20DICE_ACTIVITY);
+                callComplexDiceAddScreen(ADD_D20DICE_ACTIVITY, 0);
                 return true;
             case R.id.about_id:
                 callAboutScreen();
@@ -425,6 +418,12 @@ public class rollingTable extends Activity implements SensorEventListener {
                 String[] colours = data.getStringArrayExtra(NEW_DICE_COLOURS);
                 SimpleDice dice = new ColourDice(name, colours);
                 addDice(dice);
+            } else if (requestCode == EDIT_COLOURDICE_ACTIVITY) {
+                String name = data.getStringExtra(NEW_DICE_NAME);
+                String[] colours = data.getStringArrayExtra(NEW_DICE_COLOURS);
+                SimpleDice dice = new ColourDice(name, colours);
+                int position = data.getIntExtra(EDIT_POSITION, 0);
+                DiceList.set(position, dice);
             }
         }
     }
@@ -478,7 +477,12 @@ public class rollingTable extends Activity implements SensorEventListener {
                 removeDice(position);
                 break;
             case EDIT_ID:
-                editDice(position);
+                SimpleDice editDice = DiceList.get(position);
+                if (editDice instanceof D20Dice) {
+                    editDice(position);
+                } else if (editDice instanceof ColourDice) {
+                    callComplexDiceAddScreen(EDIT_COLOURDICE_ACTIVITY, position);
+                }
                 break;
             case REROLL_ID:
                 generateRandom(position);
@@ -501,13 +505,23 @@ public class rollingTable extends Activity implements SensorEventListener {
         DiceList.add(dice);
         mDiceAdapter.notifyDataSetChanged();
     }
-    public void callComplexDiceAddScreen(Integer func) {
+    public void callComplexDiceAddScreen(Integer func, int position) {
         Intent intent = null;
         if (func.equals(ADD_D20DICE_ACTIVITY)) {
             intent = new Intent(mContext, D20DiceAddActivity.class);
         }
         if (func.equals(ADD_COLOURDICE_ACTIVITY)) {
             intent = new Intent(mContext, ColourDiceAddActivity.class);
+        }
+        if (func.equals(EDIT_COLOURDICE_ACTIVITY)) {
+            if (position >=0) {
+                intent = new Intent(mContext, ColourDiceAddActivity.class);
+                intent.putExtra(TASK, EDIT_TASK);
+                intent.putExtra(EDIT_POSITION, position);
+                ColourDice colourDice = (ColourDice)DiceList.get(position);
+                intent.putExtra(NEW_DICE_NAME, colourDice.getName());
+                intent.putExtra(NEW_DICE_COLOURS, colourDice.getColours());
+            }
         }
         startActivityForResult(intent, func);
     }

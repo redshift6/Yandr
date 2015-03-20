@@ -56,6 +56,11 @@ public class ColourDice implements SimpleDice, Serializable {
         return mSides;
     }
 
+    public String[] getColours() {
+        String[] colours = new String[mSides];
+        colours = mColours.toArray(colours);
+        return colours;
+    }
     @Override
     public Integer getModifier() {
         return mModifier;
@@ -120,7 +125,7 @@ public class ColourDice implements SimpleDice, Serializable {
 
     @Override
     public String getName() {
-        return null;
+        return mName;
     }
 
     @Override

@@ -15,6 +15,21 @@ import android.widget.NumberPicker;
  */
 public abstract class BasicDiceAddActivity extends Activity {
 
+    static int ADD_D20DICE_ACTIVITY = 11;
+    static int EDIT_D20DICE_ACTIVITY = 12;
+    static int ADD_COLOURDICE_ACTIVITY = 21;
+    static int EDIT_COLOURDICE_ACTIVITY = 22;
+    static int ADD_TASK = 1;
+    static int EDIT_TASK = 2;
+
+    //New dice activity IDs
+    static String NEW_DICE_NAME = "NEW_DICE_NAME";
+    static String NEW_DICE_MULTI = "NEW_DICE_MULTI";
+    static String NEW_DICE_SIDES = "NEW_DICE_SIDES";
+    static String NEW_DICE_MOD = "NEW_DICE_MOD";
+    static String NEW_DICE_COLOURS = "NEW_DICE_COLOURS";
+    static String TASK = "TASK";
+    static String EDIT_POSITION = "EDIT_POSITION";
     /**
      * Add the menu options
      */
