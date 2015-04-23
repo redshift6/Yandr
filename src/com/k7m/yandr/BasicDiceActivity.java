@@ -3,7 +3,10 @@ package com.k7m.yandr;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +33,12 @@ public abstract class BasicDiceActivity extends Activity {
     static String NEW_DICE_COLOURS = "NEW_DICE_COLOURS";
     static String TASK = "TASK";
     static String EDIT_POSITION = "EDIT_POSITION";
+
+    Context mContext;
+
+    SharedPreferences sharedPref;
+    private Boolean rotate;
+
     /**
      * Add the menu options
      */
@@ -50,6 +59,22 @@ public abstract class BasicDiceActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void loadAndApplyPreferences() {
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        rotate = sharedPref.getBoolean("pref_rotate", false);
+        if (rotate) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAndApplyPreferences();
     }
 
     abstract void addDice();

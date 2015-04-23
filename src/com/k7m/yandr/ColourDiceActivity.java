@@ -15,12 +15,10 @@ import java.util.ArrayList;
 
 /**
  * Created by Andy on 19/04/2014.
- * TODO: this is the ColourDice adder.
  */
 public class ColourDiceActivity extends BasicDiceActivity {
 
     // App variables
-    private Context mContext;
     private ColourAdapter mColourAdapterTotal, mColourAdapterChosen;
     //private CheckBox mNameDice;
     private EditText mEditText;
@@ -31,11 +29,6 @@ public class ColourDiceActivity extends BasicDiceActivity {
     ListView mListViewTotal, mListViewChosen;
     private int edit_position;
     private int mFunction;
-
-    SharedPreferences sharedPref;
-    private Boolean rotate;
-
-
 
     /** Called when the activity is first created. */
     @Override
@@ -111,21 +104,5 @@ public class ColourDiceActivity extends BasicDiceActivity {
         }// otherwise we don't sent the OK signal, or add a dice.
         //regardless, we finish here.
         finish();
-    }
-
-    private void loadAndApplyPreferences() {
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        rotate = sharedPref.getBoolean("pref_rotate", false);
-        if (rotate) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadAndApplyPreferences();
     }
 }

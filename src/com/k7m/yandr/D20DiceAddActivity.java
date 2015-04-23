@@ -17,15 +17,9 @@ import java.util.ArrayList;
 /**
  * Created by Andy on 19/04/2014.
  */
-public class D20DiceAddActivity extends Activity {
+public class D20DiceAddActivity extends BasicDiceActivity {
 
-    private static int ADD_D20DICE_ACTIVITY = 1;
-    private static String NEW_DICE_NAME = "NEW_DICE_NAME";
-    private static String NEW_DICE_MULTI = "NEW_DICE_MULTI";
-    private static String NEW_DICE_SIDES = "NEW_DICE_SIDES";
-    private static String NEW_DICE_MOD = "NEW_DICE_MOD";
     // App variables
-    private Context mContext;
     private NumberPicker numpic1,numpic2,numpic3;
     //private CheckBox mNameDice;
     private EditText editText;
@@ -46,7 +40,7 @@ public class D20DiceAddActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mContext = this;
         setContentView(R.layout.diceeditactivitylayout);
         mDiceSides = getResources().getStringArray(R.array.dice_sides_string_array);
         mDiceSidesInt = getResources().getIntArray(R.array.dice_sides_integer_array);
@@ -70,29 +64,7 @@ public class D20DiceAddActivity extends Activity {
         editText.setText("");
     }
 
-    /**
-     * Add the menu options
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.addmenulayout, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.menu_add_dice:
-                addDice();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void addDice() {
+    public void addDice() {
         Intent intent = new Intent();
         if (editText.getText().toString() != null) {
             intent.putExtra(NEW_DICE_NAME, editText.getText().toString());

@@ -35,8 +35,6 @@ import java.util.Random;
  * YetANotherDiceRoller(YANDR)(Yet Another Native Dice Roller)('yandere' or 'yandir')
  * TODO: Complete the DiceAddActivity, with all the additional options it will use
  * TODO: code cleanup, especially in the settings page.
- * TODO: implement a colour dice, to choose a colour from a list of colours
- * TODO: rework the addDice screen to handle various SimpleDice implementations
  * TODO: investigate GridLayout
  */
 public class rollingTable extends Activity implements SensorEventListener {
