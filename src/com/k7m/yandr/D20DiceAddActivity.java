@@ -34,6 +34,9 @@ public class D20DiceAddActivity extends BasicDiceActivity {
     private String[] mDiceSides;
     private int[] mDiceSidesInt;
 
+    private int edit_position;
+    private int mFunction;
+
     private Boolean screenLock;
 
     /** Called when the activity is first created. */
@@ -62,6 +65,25 @@ public class D20DiceAddActivity extends BasicDiceActivity {
         numpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         editText = (EditText) findViewById(R.id.nameDiceText);
         editText.setText("");
+
+        //check intent for edit functionality to read in the dice to be edited
+        Intent intent = getIntent();
+        if (intent.hasExtra(TASK)) {
+            mFunction = intent.getIntExtra(TASK, 1);
+            if (mFunction == EDIT_TASK) {
+                edit_position = intent.getIntExtra(EDIT_POSITION, 0);
+                String name = intent.getStringExtra(NEW_DICE_NAME);
+                editText.setText(name);
+                numpic1.setValue(intent.getIntExtra(NEW_DICE_MULTI, 1));
+                int sides = intent.getIntExtra(NEW_DICE_SIDES, 0);
+                for (int i = 0; i<mDiceSidesInt.length; i++) {
+                    if (sides == mDiceSidesInt[i]) {
+                        numpic2.setValue(i);
+                    }
+                }
+                numpic3.setValue(intent.getIntExtra(NEW_DICE_MOD, 0));
+            }
+        }
     }
 
     public void addDice() {
@@ -73,6 +95,10 @@ public class D20DiceAddActivity extends BasicDiceActivity {
         intent.putExtra(NEW_DICE_SIDES, mDiceSidesInt[numpic2.getValue()]);
         intent.putExtra(NEW_DICE_MOD, numpic3.getValue());
         setResult(RESULT_OK, intent);
+        if (mFunction == EDIT_TASK) {
+            intent.putExtra(TASK, EDIT_TASK);
+            intent.putExtra(EDIT_POSITION, edit_position);
+        }
         finish();
     }
 }

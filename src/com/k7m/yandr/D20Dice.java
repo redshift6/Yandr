@@ -100,6 +100,12 @@ public class D20Dice implements Serializable, SimpleDice {
     public String getTitleAndTotal() {
         return mTitle + " = " + getTotal();
     }
+
+    @Override
+    public SimpleDice clone() {
+        return new D20Dice(this.getMultiplier(), this.getSides(), this.getModifier(), this.getName());
+    }
+
     /**
      * @return The total of the raw rolls, summed
      */

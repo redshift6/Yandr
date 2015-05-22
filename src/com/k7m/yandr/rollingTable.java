@@ -327,7 +327,7 @@ public class rollingTable extends Activity implements SensorEventListener {
     }
     public void cloneDice(int position){
         SimpleDice dice = DiceList.get(position);
-        SimpleDice dice2 = new D20Dice(dice.getMultiplier(), dice.getSides(), dice.getModifier());
+        SimpleDice dice2 = dice.clone();
         DiceList.add(position+1, dice2);
         mDiceAdapter.notifyDataSetChanged();
 
@@ -411,6 +411,14 @@ public class rollingTable extends Activity implements SensorEventListener {
                         data.getIntExtra(NEW_DICE_MOD, 1),
                         data.getStringExtra(NEW_DICE_NAME));
                 addDice(dice);
+            } else if (requestCode == EDIT_D20DICE_ACTIVITY) {
+                SimpleDice dice = new D20Dice(
+                        data.getIntExtra(NEW_DICE_MULTI, 1),
+                        data.getIntExtra(NEW_DICE_SIDES, 1),
+                        data.getIntExtra(NEW_DICE_MOD, 1),
+                        data.getStringExtra(NEW_DICE_NAME));
+                int position = data.getIntExtra(EDIT_POSITION, 0);
+                DiceList.set(position, dice);
             } else if (requestCode == ADD_COLOURDICE_ACTIVITY) {
                 String name = data.getStringExtra(NEW_DICE_NAME);
                 String[] colours = data.getStringArrayExtra(NEW_DICE_COLOURS);
@@ -424,6 +432,8 @@ public class rollingTable extends Activity implements SensorEventListener {
                 DiceList.set(position, dice);
             }
         }
+        //we are here presumably because the result code was not OK
+        //we don't care, since we don't NEED anything in that case.
     }
 
     public void clearScreen() {
@@ -477,7 +487,7 @@ public class rollingTable extends Activity implements SensorEventListener {
             case EDIT_ID:
                 SimpleDice editDice = DiceList.get(position);
                 if (editDice instanceof D20Dice) {
-                    editDice(position);
+                    callComplexDiceAddScreen(EDIT_D20DICE_ACTIVITY, position);
                 } else if (editDice instanceof ColourDice) {
                     callComplexDiceAddScreen(EDIT_COLOURDICE_ACTIVITY, position);
                 }
@@ -507,6 +517,18 @@ public class rollingTable extends Activity implements SensorEventListener {
         Intent intent = null;
         if (func.equals(ADD_D20DICE_ACTIVITY)) {
             intent = new Intent(mContext, D20DiceAddActivity.class);
+        }
+        if (func.equals(EDIT_D20DICE_ACTIVITY)) {
+            if (position >=0) {
+                intent = new Intent(mContext, D20DiceAddActivity.class);
+                intent.putExtra(TASK, EDIT_TASK);
+                intent.putExtra(EDIT_POSITION, position);
+                D20Dice d20Dice = (D20Dice)DiceList.get(position);
+                intent.putExtra(NEW_DICE_NAME, d20Dice.getName());
+                intent.putExtra(NEW_DICE_MULTI, d20Dice.getMultiplier());
+                intent.putExtra(NEW_DICE_MOD, d20Dice.getModifier());
+                intent.putExtra(NEW_DICE_SIDES, d20Dice.getSides());
+            }
         }
         if (func.equals(ADD_COLOURDICE_ACTIVITY)) {
             intent = new Intent(mContext, ColourDiceActivity.class);

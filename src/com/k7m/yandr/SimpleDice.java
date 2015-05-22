@@ -66,4 +66,5 @@ public interface SimpleDice {
 
     public String getTitleAndTotal();
 
+    public SimpleDice clone();
 }

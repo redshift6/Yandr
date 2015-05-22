@@ -154,4 +154,9 @@ public class ColourDice implements SimpleDice, Serializable {
     public String getTitleAndTotal() {
         return null;
     }
+
+    @Override
+    public SimpleDice clone() {
+        return new ColourDice(this.getName(), this.getColours());
+    }
 }
