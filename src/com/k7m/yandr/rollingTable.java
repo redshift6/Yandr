@@ -33,7 +33,6 @@ import java.util.Random;
 
 /*TODO: 
  * YetANotherDiceRoller(YANDR)(Yet Another Native Dice Roller)('yandere' or 'yandir')
- * TODO: Complete the DiceAddActivity, with all the additional options it will use
  * TODO: code cleanup, especially in the settings page.
  * TODO: investigate GridLayout
  */
@@ -75,12 +74,10 @@ public class rollingTable extends Activity implements SensorEventListener {
     // App variables
     private Context mContext;
     private DiceAdapter mDiceAdapter;
-    private NumberPicker mNumpic1,mNumpic2,mNumpic3;
     private CheckBox mShakeLock;
     private boolean mRollLock;
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private CheckBox mGroupDice;
 
     // Motion sensitivity variables
     private float mLastX, mLastY, mLastZ;
@@ -89,11 +86,6 @@ public class rollingTable extends Activity implements SensorEventListener {
     private float mCummDelta = 0;
     public long mCummulativeTrigger = 20; //consider as a setting
 
-    // Dice_Edit_Dialog Number_Picker max and min values
-    private final static Integer MinDiceMulti = 1;
-    private final static Integer MaxDiceMulti = 9;
-    private final static Integer MinDiceMod = 0;
-    private final static Integer MaxDiceMod = 100;
     // Dice Arrays for Dice sides and text representations
     private String[] mDiceSides;
     private Integer[] mDiceSidesInt;
@@ -225,106 +217,7 @@ public class rollingTable extends Activity implements SensorEventListener {
 
         dialog.show();
     }
-    /**
-     * Add a dice by showing a number picker dialog, allow the user to set the values they want, and then add it to the ArrayList.
-     */
-    public void addDice() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.diceeditdialog2, (ViewGroup) findViewById(R.id.layout_root));
-        mNumpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
-        mNumpic1.setMaxValue(MaxDiceMulti);
-        mNumpic1.setMinValue(MinDiceMulti);
-        mNumpic2 = (NumberPicker) layout.findViewById(R.id.sidespicker);
-        mNumpic2.setDisplayedValues(mDiceSides);
-        mNumpic2.setMaxValue(mDiceSides.length-1);
-        mNumpic2.setMinValue(0);
-        mNumpic3 = (NumberPicker) layout.findViewById(R.id.modpicker);
-        mNumpic3.setMaxValue(MaxDiceMod);
-        mNumpic3.setMinValue(MinDiceMod);
-        // Suppress soft keyboard from the beginning
-        // it was infuriatingly popping up and down whenever user tried to edit multiplier
-        mNumpic1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        mNumpic2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        mNumpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        mGroupDice = (CheckBox) layout.findViewById(R.id.groupDice);
-        mGroupDice.setChecked(false);
-        builder.setMessage(R.string.dice_add_dialog_string).setCancelable(true).setPositiveButton(R.string.prompt_ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                SimpleDice dice;
-                if (mGroupDice.isChecked())  {
-                    dice = new D20Dice(mNumpic1.getValue(), mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
-                    DiceList.add(dice);
-                }
-                if (!mGroupDice.isChecked()) {
-                    for (int i = 0;i<mNumpic1.getValue();i++){
-                        dice = new D20Dice(1, mDiceSidesInt[mNumpic2.getValue()], mNumpic3.getValue());
-                        DiceList.add(dice);
-                    }
-                }
-                mDiceAdapter.notifyDataSetChanged();
-            }
-        })
-                .setNegativeButton(R.string.prompt_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        builder.setView(layout);
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
-    public void addTTR() {
-        DiceList.add(new ColourDice());
-        mDiceAdapter.notifyDataSetChanged();
-    }
-    public void editDice(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.diceeditdialog, (ViewGroup) findViewById(R.id.layout_root));
-        final SimpleDice currentDice = (D20Dice)mDiceAdapter.getItem(position);
-        mNumpic1 = (NumberPicker) layout.findViewById(R.id.multipicker);
-        mNumpic1.setMaxValue(MaxDiceMulti);
-        mNumpic1.setMinValue(MinDiceMulti);
-        mNumpic2 = (NumberPicker) layout.findViewById(R.id.sidespicker);
-        mNumpic2.setDisplayedValues(mDiceSides);
-        mNumpic2.setMaxValue(mDiceSides.length-1);
-        mNumpic2.setMinValue(0);
-        mNumpic3 = (NumberPicker) layout.findViewById(R.id.modpicker);
-        mNumpic3.setMaxValue(MaxDiceMod);
-        mNumpic3.setMinValue(MinDiceMod);
-        mNumpic1.setValue(currentDice.getMultiplier());
-        for (int i = 0; i<mDiceSidesInt.length; i++) {
-            if (currentDice.getSides() == mDiceSidesInt[i]) {
-                mNumpic2.setValue(i);
-            }
-        }
-        mNumpic3.setValue(currentDice.getModifier());
-        mNumpic1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        mNumpic2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        mNumpic3.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        builder.setMessage(R.string.dice_edit_dialog_string).setCancelable(true).setPositiveButton(R.string.prompt_ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (mNumpic1.getValue() != currentDice.getMultiplier()) {
-                    DiceList.get(position).setMultiplier(mNumpic1.getValue());
-                }
-                if (mDiceSidesInt[mNumpic2.getValue()] != currentDice.getSides()) {
-                    DiceList.get(position).setSides(mDiceSidesInt[mNumpic2.getValue()]);
-                }
-                DiceList.get(position).setModifier(mNumpic3.getValue());
-                mDiceAdapter.notifyDataSetChanged();
-            }
-        })
-                .setNegativeButton(R.string.prompt_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        builder.setView(layout);
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
     public void cloneDice(int position){
         SimpleDice dice = DiceList.get(position);
         SimpleDice dice2 = dice.clone();
@@ -333,7 +226,7 @@ public class rollingTable extends Activity implements SensorEventListener {
 
     }
     public void generateRandom(int i) {
-        //if i is less than 0, do all dice rolls here, if =0, do specified dice rolls at the dice class level
+        //if i is < 0, do all dice rolls here, if = 0, do specified dice rolls at the dice class level
         // Use an i of -1 to generate all random values in one place from one rand seed
         if (!DiceList.isEmpty()) {
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
